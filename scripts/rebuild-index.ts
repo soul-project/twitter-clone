@@ -15,7 +15,7 @@ if (fs.existsSync(LOCAL_ENV_PATH)) {
 
 const redisClient = new Client();
 
-async function syncIndexes() {
+async function rebuildIndexes() {
   const client = await redisClient.open(process.env.REDIS_STACK_URL);
 
   const postRepository = client.fetchRepository(postSchema);
@@ -31,4 +31,4 @@ async function syncIndexes() {
   console.log("Done.");
 }
 
-syncIndexes();
+rebuildIndexes();

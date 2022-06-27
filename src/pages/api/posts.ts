@@ -24,7 +24,9 @@ class PostHandler extends PostController {
   ) {
     const postRepository = await this.getPostRepository();
     await postRepository.createIndex();
-    const baseQuery = postRepository.search().return;
+    const baseQuery = postRepository
+      .search()
+      .sortBy("updatedAt", "DESC").return;
 
     const posts = await baseQuery.page(
       queryParams.page - 1,

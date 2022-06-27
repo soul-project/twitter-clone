@@ -14,6 +14,6 @@ export const postSchema = new Schema(Post, {
   title: { type: "text" },
   body: { type: "text" },
   userId: { type: "number" },
-  createdAt: { type: "date" },
-  updatedAt: { type: "date" },
+  createdAt: { type: "date", sortable: true },
+  updatedAt: { type: "date", sortable: true },
 });
