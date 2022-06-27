@@ -11,9 +11,6 @@ export class PostController extends BaseController {
     if (!this.postRepository) {
       const client = await this.getRedisClient();
       this.postRepository = client.fetchRepository(postSchema);
-
-      await this.postRepository.dropIndex();
-      await this.postRepository.createIndex();
     }
     return this.postRepository;
   }
