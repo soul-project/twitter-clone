@@ -1,6 +1,6 @@
 import NextAuth from "next-auth";
 
-const CLIENT_ID = 2;
+const CLIENT_ID = 3;
 
 const getNewTokenFromServer = async (
   refreshToken: string

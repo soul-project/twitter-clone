@@ -2,11 +2,16 @@ import {
   Body,
   createHandler,
   Get,
+  HttpException,
   Post,
   Query,
+  Req,
   ValidationPipe,
 } from "@storyofams/next-api-decorators";
 import { Client } from "redis-om";
+import * as next from "next";
+import { getSession } from "next-auth/react";
+import { StatusCodes } from "http-status-codes";
 
 import { postSchema } from "src/models/posts";
 import { PaginationQueryParamsDto } from "src/serializers/pagination.dto";
@@ -33,10 +38,16 @@ class PostHandler {
   }
 
   @Post()
-  async createPost(@Body(ValidationPipe) body: CreatePostBodyDto) {
+  async createPost(
+    @Req() req: next.NextApiRequest,
+    @Body(ValidationPipe) body: CreatePostBodyDto
+  ) {
     const client = await this.getRedisClient();
     const postRepository = client.fetchRepository(postSchema);
-    // TODO: Validate user to make sure it exists and is the same as the current user
+    const session = await getSession({ req });
+
+    if (session?.user.id !== body.userId)
+      throw new HttpException(StatusCodes.FORBIDDEN);
 
     const newPost = await postRepository.createAndSave({
       title: body.title,

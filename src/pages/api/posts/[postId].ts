@@ -6,7 +6,6 @@ import {
   HttpException,
   Put,
   Req,
-  Res,
   ValidationPipe,
 } from "@storyofams/next-api-decorators";
 import * as next from "next";
@@ -34,17 +33,27 @@ class PostHandler {
   }
 
   @Delete()
-  async deletePost(@Req() { query: { postId } }: next.NextApiRequest) {
+  async deletePost(@Req() req: next.NextApiRequest) {
+    const {
+      query: { postId },
+    } = req;
     const client = await this.getRedisClient();
     const postRepository = client.fetchRepository(postSchema);
-    // TODO: Validate to see if current user owns this post
+    const existingPost = await postRepository.fetch(postId as string);
+    const session = await getSession({ req });
+
+    if (existingPost.userId === null) {
+      throw new HttpException(StatusCodes.NOT_FOUND);
+    }
+    if (session?.user.id !== existingPost.userId)
+      throw new HttpException(StatusCodes.FORBIDDEN);
+
     await postRepository.remove(postId as string);
   }
 
   @Put()
   async updatePost(
     @Req() req: next.NextApiRequest,
-    @Res() res: next.NextApiResponse,
     @Body(ValidationPipe) body: CreatePostBodyDto
   ) {
     const {
@@ -55,12 +64,11 @@ class PostHandler {
     const existingPost = await postRepository.fetch(postId as string);
     const session = await getSession({ req });
 
-    console.log(
-      "🚀 ~ file: [postId].ts ~ line 53 ~ PostHandler ~ session",
-      session
-    );
-
-    // TODO: Validate if current user owns this post
+    if (
+      session?.user.id !== existingPost.userId &&
+      existingPost.userId !== body.userId
+    )
+      throw new HttpException(StatusCodes.FORBIDDEN);
 
     existingPost.body = body.body;
     existingPost.title = body.title;

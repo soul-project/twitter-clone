@@ -23,6 +23,14 @@ const Home: NextPage = () => {
     }
   }, [session]);
 
+  useEffect(() => {
+    const fetchData = async () => {
+      const res = await fetch("/api/posts");
+      const json = await res.json();
+    };
+    session && fetchData();
+  }, [session]);
+
   return (
     <div className={styles.container}>
       <Head>
