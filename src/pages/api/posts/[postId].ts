@@ -9,15 +9,16 @@ import {
   ValidationPipe,
 } from "@storyofams/next-api-decorators";
 import * as next from "next";
-import { Client } from "redis-om";
+import { Client, Repository } from "redis-om";
 import { StatusCodes } from "http-status-codes";
 import { getSession } from "next-auth/react";
 
-import { postSchema } from "src/models/posts";
+import { postSchema, Post as PostModel } from "src/models/posts";
 import { CreatePostBodyDto } from "src/serializers/posts.dto";
 
 class PostHandler {
   redisClient: Client | undefined = undefined;
+  postRepository: Repository<PostModel> | undefined;
 
   @Get()
   async findPost(@Req() { query: { postId } }: next.NextApiRequest) {
@@ -37,8 +38,7 @@ class PostHandler {
     const {
       query: { postId },
     } = req;
-    const client = await this.getRedisClient();
-    const postRepository = client.fetchRepository(postSchema);
+    const postRepository = await this.getPostRepository();
     const existingPost = await postRepository.fetch(postId as string);
     const session = await getSession({ req });
 
@@ -59,15 +59,11 @@ class PostHandler {
     const {
       query: { postId },
     } = req;
-    const client = await this.getRedisClient();
-    const postRepository = client.fetchRepository(postSchema);
+    const postRepository = await this.getPostRepository();
     const existingPost = await postRepository.fetch(postId as string);
     const session = await getSession({ req });
 
-    if (
-      session?.user.id !== existingPost.userId &&
-      existingPost.userId !== body.userId
-    )
+    if (session?.user.id !== existingPost.userId)
       throw new HttpException(StatusCodes.FORBIDDEN);
 
     existingPost.body = body.body;
@@ -85,6 +81,15 @@ class PostHandler {
       );
     }
     return this.redisClient;
+  }
+
+  private async getPostRepository() {
+    if (!this.postRepository) {
+      const client = await this.getRedisClient();
+      this.postRepository = client.fetchRepository(postSchema);
+      this.postRepository.createIndex();
+    }
+    return this.postRepository;
   }
 }
 

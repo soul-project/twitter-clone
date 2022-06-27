@@ -8,33 +8,34 @@ import {
   Req,
   ValidationPipe,
 } from "@storyofams/next-api-decorators";
-import { Client } from "redis-om";
+import { Client, Repository } from "redis-om";
 import * as next from "next";
 import { getSession } from "next-auth/react";
 import { StatusCodes } from "http-status-codes";
 
-import { postSchema } from "src/models/posts";
+import { Post as PostModel, postSchema } from "src/models/posts";
 import { PaginationQueryParamsDto } from "src/serializers/pagination.dto";
 import { CreatePostBodyDto } from "src/serializers/posts.dto";
 
 class PostHandler {
   redisClient: Client | undefined = undefined;
+  postRepository: Repository<PostModel> | undefined;
 
   @Get()
   async findPosts(
     @Query(ValidationPipe) queryParams: PaginationQueryParamsDto
   ) {
-    const client = await this.getRedisClient();
-    const postRepository = client.fetchRepository(postSchema);
+    const postRepository = await this.getPostRepository();
+    await postRepository.createIndex();
     const baseQuery = postRepository.search().return;
 
-    return {
-      posts: await baseQuery.page(
-        queryParams.page - 1,
-        queryParams.numItemsPerPage
-      ),
-      totalCount: await baseQuery.count(),
-    };
+    const posts = await baseQuery.page(
+      queryParams.page - 1,
+      queryParams.numItemsPerPage
+    );
+    const totalCount = await baseQuery.count();
+
+    return { posts, totalCount };
   }
 
   @Post()
@@ -42,16 +43,14 @@ class PostHandler {
     @Req() req: next.NextApiRequest,
     @Body(ValidationPipe) body: CreatePostBodyDto
   ) {
-    const client = await this.getRedisClient();
-    const postRepository = client.fetchRepository(postSchema);
+    const postRepository = await this.getPostRepository();
     const session = await getSession({ req });
 
-    if (session?.user.id !== body.userId)
-      throw new HttpException(StatusCodes.FORBIDDEN);
+    if (!session?.user.id) throw new HttpException(StatusCodes.FORBIDDEN);
 
     const newPost = await postRepository.createAndSave({
       title: body.title,
-      userId: body.userId,
+      userId: session.user.id,
       body: body.body,
       createdAt: new Date(),
       updatedAt: new Date(),
@@ -68,6 +67,17 @@ class PostHandler {
       );
     }
     return this.redisClient;
+  }
+
+  private async getPostRepository() {
+    if (!this.postRepository) {
+      const client = await this.getRedisClient();
+      this.postRepository = client.fetchRepository(postSchema);
+
+      await this.postRepository.dropIndex();
+      await this.postRepository.createIndex();
+    }
+    return this.postRepository;
   }
 }
 

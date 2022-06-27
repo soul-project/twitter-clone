@@ -27,9 +27,23 @@ const Home: NextPage = () => {
     const fetchData = async () => {
       const res = await fetch("/api/posts");
       const json = await res.json();
+      console.log("🚀 ~ file: index.tsx ~ line 30 ~ fetchData ~ json", json);
     };
     session && fetchData();
   }, [session]);
+
+  const postSomethingNew = async () => {
+    await fetch("/api/posts", {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify({
+        title: "Hello there~",
+        body: "general Kenobiii!",
+      }),
+    });
+  };
 
   return (
     <div className={styles.container}>
@@ -43,6 +57,7 @@ const Home: NextPage = () => {
         <Button onClick={() => (session ? signOut() : signIn("soul"))}>
           {session ? "Sign out" : "Sign in"}
         </Button>
+        <Button onClick={postSomethingNew}>Post something</Button>
       </main>
 
       <footer className={styles.footer}>
