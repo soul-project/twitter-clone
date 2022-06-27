@@ -8,19 +8,16 @@ import {
   Req,
   ValidationPipe,
 } from "@storyofams/next-api-decorators";
-import { Client, Repository } from "redis-om";
 import * as next from "next";
 import { getSession } from "next-auth/react";
 import { StatusCodes } from "http-status-codes";
 
-import { Post as PostModel, postSchema } from "src/models/posts";
 import { PaginationQueryParamsDto } from "src/serializers/pagination.dto";
 import { CreatePostBodyDto } from "src/serializers/posts.dto";
 
-class PostHandler {
-  redisClient: Client | undefined = undefined;
-  postRepository: Repository<PostModel> | undefined;
+import { PostController } from "./posts/post.controller";
 
+class PostHandler extends PostController {
   @Get()
   async findPosts(
     @Query(ValidationPipe) queryParams: PaginationQueryParamsDto
@@ -57,27 +54,6 @@ class PostHandler {
     });
 
     return newPost.toJSON();
-  }
-
-  private async getRedisClient() {
-    if (!this.redisClient) {
-      this.redisClient = new Client();
-      this.redisClient = await this.redisClient.open(
-        process.env.REDIS_STACK_URL
-      );
-    }
-    return this.redisClient;
-  }
-
-  private async getPostRepository() {
-    if (!this.postRepository) {
-      const client = await this.getRedisClient();
-      this.postRepository = client.fetchRepository(postSchema);
-
-      await this.postRepository.dropIndex();
-      await this.postRepository.createIndex();
-    }
-    return this.postRepository;
   }
 }
 

@@ -9,21 +9,17 @@ import {
   ValidationPipe,
 } from "@storyofams/next-api-decorators";
 import * as next from "next";
-import { Client, Repository } from "redis-om";
 import { StatusCodes } from "http-status-codes";
 import { getSession } from "next-auth/react";
 
-import { postSchema, Post as PostModel } from "src/models/posts";
 import { CreatePostBodyDto } from "src/serializers/posts.dto";
 
-class PostHandler {
-  redisClient: Client | undefined = undefined;
-  postRepository: Repository<PostModel> | undefined;
+import { PostController } from "./post.controller";
 
+class PostHandler extends PostController {
   @Get()
   async findPost(@Req() { query: { postId } }: next.NextApiRequest) {
-    const client = await this.getRedisClient();
-    const postRepository = client.fetchRepository(postSchema);
+    const postRepository = await this.getPostRepository();
     const result = await postRepository.fetch(postId as string);
 
     if (result.userId === null) {
@@ -71,25 +67,6 @@ class PostHandler {
 
     await postRepository.save(existingPost);
     return existingPost;
-  }
-
-  private async getRedisClient() {
-    if (!this.redisClient) {
-      this.redisClient = new Client();
-      this.redisClient = await this.redisClient.open(
-        process.env.REDIS_STACK_URL
-      );
-    }
-    return this.redisClient;
-  }
-
-  private async getPostRepository() {
-    if (!this.postRepository) {
-      const client = await this.getRedisClient();
-      this.postRepository = client.fetchRepository(postSchema);
-      this.postRepository.createIndex();
-    }
-    return this.postRepository;
   }
 }
 
