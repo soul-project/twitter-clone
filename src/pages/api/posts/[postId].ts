@@ -6,11 +6,13 @@ import {
   HttpException,
   Put,
   Req,
+  Res,
   ValidationPipe,
 } from "@storyofams/next-api-decorators";
 import * as next from "next";
 import { Client } from "redis-om";
 import { StatusCodes } from "http-status-codes";
+import { getSession } from "next-auth/react";
 
 import { postSchema } from "src/models/posts";
 import { CreatePostBodyDto } from "src/serializers/posts.dto";
@@ -41,13 +43,23 @@ class PostHandler {
 
   @Put()
   async updatePost(
-    @Req()
-    { query: { postId } }: next.NextApiRequest,
+    @Req() req: next.NextApiRequest,
+    @Res() res: next.NextApiResponse,
     @Body(ValidationPipe) body: CreatePostBodyDto
   ) {
+    const {
+      query: { postId },
+    } = req;
     const client = await this.getRedisClient();
     const postRepository = client.fetchRepository(postSchema);
     const existingPost = await postRepository.fetch(postId as string);
+    const session = await getSession({ req });
+
+    console.log(
+      "🚀 ~ file: [postId].ts ~ line 53 ~ PostHandler ~ session",
+      session
+    );
+
     // TODO: Validate if current user owns this post
 
     existingPost.body = body.body;
