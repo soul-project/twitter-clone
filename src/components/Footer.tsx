@@ -4,7 +4,9 @@ import { Box } from "@chakra-ui/react";
 export default function Footer() {
   return (
     <footer>
-      <Box>Hello world</Box>
+      <Box minHeight="100px" bgColor="black">
+        Footer
+      </Box>
     </footer>
   );
 }

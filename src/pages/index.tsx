@@ -48,17 +48,11 @@ const Home: NextPage = () => {
   return (
     <>
       <Head />
-
       <Page>
         <VStack marginTop="32px">
-          <Button onClick={() => (session ? signOut() : signIn("soul"))}>
-            {session ? "Sign out" : "Sign in"}
-          </Button>
           <Button onClick={postSomethingNew}>Post something</Button>
         </VStack>
       </Page>
-
-      <Footer />
     </>
   );
 };
