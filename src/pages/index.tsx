@@ -1,7 +1,7 @@
 import { useEffect } from "react";
-import { Button, Stack } from "@mantine/core";
 import type { NextPage } from "next";
 import { getSession, signIn, signOut, useSession } from "next-auth/react";
+import { Button, VStack } from "@chakra-ui/react";
 
 import Head from "src/components/Head";
 import Page from "src/components/Page";
@@ -50,12 +50,12 @@ const Home: NextPage = () => {
       <Head />
 
       <Page>
-        <Stack sx={() => ({ marginTop: "32px" })}>
+        <VStack marginTop="32px">
           <Button onClick={() => (session ? signOut() : signIn("soul"))}>
             {session ? "Sign out" : "Sign in"}
           </Button>
           <Button onClick={postSomethingNew}>Post something</Button>
-        </Stack>
+        </VStack>
       </Page>
 
       <Footer />

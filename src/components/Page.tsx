@@ -1,16 +1,11 @@
-import { Box } from "@mantine/core";
+import { Box } from "@chakra-ui/react";
 import React from "react";
+import Sidebar from "./Sidebar";
 
 export default function Page({ children, ...props }: Props) {
   return (
     <main>
-      <Box
-        sx={() => ({
-          minHeight: "100vh",
-          padding: "0px 64px",
-        })}
-        {...props}
-      >
+      <Box minHeight="100vh" padding="0px 64px" {...props}>
         {children}
       </Box>
     </main>
