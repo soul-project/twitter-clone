@@ -1,4 +1,6 @@
 import NextAuth from "next-auth";
+import { JWT } from "next-auth/jwt";
+import axios from "axios";
 
 const CLIENT_ID = 3;
 
@@ -10,28 +12,54 @@ const getNewTokenFromServer = async (
   refreshToken: string;
 }> => {
   const url = "https://api.soul-network.com/v1/auth/refresh";
-  const req = await fetch(url, {
-    headers: {
-      "Content-Type": "application/json",
-    },
-    method: "POST",
-    body: JSON.stringify({
+  const { data } = await axios.post<{
+    access_token: string;
+    expires_in: number;
+    refresh_token: string;
+  }>(
+    url,
+    {
       refresh_token: refreshToken,
       client_id: CLIENT_ID,
-    }),
-  });
-
-  const res = await req.json();
-  if (!req.ok) throw res;
+    },
+    { headers: { "Content-Type": "application/json" } }
+  );
 
   return {
-    accessToken: res.access_token,
-    expiresIn: res.expires_in,
-    refreshToken: res.refresh_token,
+    accessToken: data.access_token,
+    expiresIn: data.expires_in,
+    refreshToken: data.refresh_token,
   };
 };
 
-async function refreshAccessToken(token: any) {
+const getTokenWithLatestUserInfo = async (token: JWT): Promise<JWT> => {
+  try {
+    const { data: user } = await axios.get<{
+      id: number;
+      username: string;
+      user_handle: string;
+      email: string;
+      is_active: boolean;
+    }>("https://api.soul-network.com/v1/users/me", {
+      headers: { Authorization: `Bearer ${token.accessToken}` },
+    });
+
+    return {
+      ...token,
+      user: {
+        id: user.id,
+        username: user.username,
+        userHandle: user.user_handle,
+        email: user.email,
+        isActive: user.is_active,
+      },
+    };
+  } catch (_err) {
+    return token;
+  }
+};
+
+const refreshAccessToken = async (token: JWT): Promise<JWT> => {
   try {
     const refreshedTokens = await getNewTokenFromServer(token.refreshToken);
     const expiresAt = Date.now() + refreshedTokens.expiresIn * 1000;
@@ -50,7 +78,7 @@ async function refreshAccessToken(token: any) {
       error: "RefreshAccessTokenError",
     };
   }
-}
+};
 
 export default NextAuth({
   // Configure one or more authentication providers
@@ -85,20 +113,21 @@ export default NextAuth({
           : Date.now() + 900 * 1000;
 
         return {
+          account,
           accessToken: account.access_token,
           accessTokenExpires: expiresAt,
           refreshToken: account.refresh_token,
           user,
-        };
+        } as JWT;
       }
 
       // Return previous token if the access token has not expired yet
       if (Date.now() < token.accessTokenExpires) {
-        return token;
+        return getTokenWithLatestUserInfo(token);
       }
 
       // Access token has expired, try to update it
-      return refreshAccessToken(token);
+      return getTokenWithLatestUserInfo(await refreshAccessToken(token));
     },
     async session({ session, token }) {
       session.user = token.user;

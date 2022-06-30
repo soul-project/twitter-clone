@@ -17,7 +17,9 @@ declare module "next-auth" {
 
   interface Profile extends SoulUser {}
 
-  interface User extends SoulUser {}
+  interface User extends SoulUser {
+    id: number;
+  }
 }
 
 declare module "next-auth/jwt" {
@@ -26,6 +28,9 @@ declare module "next-auth/jwt" {
     account: {
       expires_at: number;
     };
+    accessToken: string;
+    refreshToken: string;
     accessTokenExpires: number;
+    error?: string;
   }
 }
