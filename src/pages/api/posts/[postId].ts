@@ -63,7 +63,6 @@ class PostHandler extends PostController {
       throw new HttpException(StatusCodes.FORBIDDEN);
 
     existingPost.body = body.body;
-    existingPost.title = body.title;
 
     await postRepository.save(existingPost);
     return existingPost;

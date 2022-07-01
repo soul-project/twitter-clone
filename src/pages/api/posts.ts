@@ -23,7 +23,6 @@ class PostHandler extends PostController {
     @Query(ValidationPipe) queryParams: PaginationQueryParamsDto
   ) {
     const postRepository = await this.getPostRepository();
-    await postRepository.createIndex();
     const baseQuery = postRepository
       .search()
       .sortBy("updatedAt", "DESC").return;
@@ -48,7 +47,6 @@ class PostHandler extends PostController {
     if (!session?.user.id) throw new HttpException(StatusCodes.FORBIDDEN);
 
     const newPost = await postRepository.createAndSave({
-      title: body.title,
       userId: session.user.id,
       body: body.body,
       createdAt: new Date(),
