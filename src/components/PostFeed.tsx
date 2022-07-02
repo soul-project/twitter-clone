@@ -4,9 +4,10 @@ import { useQuery } from "react-query";
 
 import { getList } from "src/modules/posts/getList";
 
-import PostCard from "./PostCard";
+import Card from "./PostFeed/Card";
 
 export default function PostFeed() {
+  // TODO: add use query infinite here
   const { data, isFetching } = useQuery([getList.key], () => getList());
 
   if (!data || isFetching) return <Text>loading...</Text>;
@@ -14,7 +15,7 @@ export default function PostFeed() {
   return (
     <VStack w="100%" spacing="0px">
       {data?.posts.map((post) => (
-        <PostCard key={post.entityId} post={post} />
+        <Card key={post.entityId} post={post} />
       ))}
     </VStack>
   );
