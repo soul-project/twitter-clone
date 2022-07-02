@@ -74,6 +74,7 @@ export default function CreateNewPostForm() {
                           props.submitForm();
                         }
                       }}
+                      variant="flushed"
                     />
                     <FormErrorMessage>{form.errors.body}</FormErrorMessage>
                   </FormControl>
