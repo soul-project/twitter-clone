@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useEffect } from "react";
 import { Text, VStack, Button } from "@chakra-ui/react";
 import { useInfiniteQuery } from "react-query";
 
@@ -22,6 +22,23 @@ export default function PostFeed() {
         refetchOnWindowFocus: false,
       }
     );
+
+  useEffect(() => {
+    const handleScroll = () => {
+      const bottom =
+        Math.ceil(window.innerHeight + window.scrollY) >=
+        document.documentElement.scrollHeight;
+      if (bottom) {
+        fetchNextPage();
+      }
+    };
+    window.addEventListener("scroll", handleScroll, {
+      passive: true,
+    });
+    return () => {
+      window.removeEventListener("scroll", handleScroll);
+    };
+  }, []);
 
   return (
     <VStack spacing="16px" pb="16px" w="100%">
