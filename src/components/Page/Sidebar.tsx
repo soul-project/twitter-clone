@@ -1,8 +1,8 @@
 import React from "react";
 import { Button, VStack } from "@chakra-ui/react";
-import { WarningTwoIcon, Icon } from "@chakra-ui/icons";
+import { Icon } from "@chakra-ui/icons";
 import { AiFillHome } from "react-icons/ai";
-import { BsFillPersonFill } from "react-icons/bs";
+import { BsFillPersonFill, BsTwitter } from "react-icons/bs";
 import { IoIosSend } from "react-icons/io";
 import { signIn, signOut, useSession } from "next-auth/react";
 import SidebarButton from "./Sidebar/SidebarButton";
@@ -19,9 +19,10 @@ export default function Sidebar() {
         minHeight="100vh"
         paddingTop="32px"
         paddingBottom="32px"
+        w="275px"
       >
         <VStack spacing="48px" alignItems="flex-start">
-          <WarningTwoIcon w="32px" h="32px" />
+          <Icon as={BsTwitter} w="32px" h="32px" color="yellow" />
           <SidebarButton
             title="Home"
             icon={<Icon as={AiFillHome} />}

@@ -1,7 +1,7 @@
 import { useEffect, useState } from "react";
 import type { NextPage } from "next";
 import { getSession, signOut, useSession } from "next-auth/react";
-import { VStack } from "@chakra-ui/react";
+import { VStack, Text, Box } from "@chakra-ui/react";
 
 import Head from "src/components/Head";
 import Page from "src/components/Page";
@@ -34,26 +34,18 @@ const Home: NextPage = () => {
     session && fetchData();
   }, [session]);
 
-  // const postSomethingNew = async () => {
-  //   await fetch("/api/posts", {
-  //     method: "POST",
-  //     headers: {
-  //       "Content-Type": "application/json",
-  //     },
-  //     body: JSON.stringify({
-  //       body: "general Kenobiii!",
-  //     }),
-  //   });
-  // };
-
   return (
     <>
       <Head />
-      <Page>
-        <VStack marginTop="32px">
-          {/* <Button onClick={postSomethingNew}>Post something</Button> */}
+      <Page
+        borderLeft="1px solid white"
+        borderRight="1px solid white"
+        paddingTop="32px"
+      >
+        <VStack alignItems="flex-start" spacing="0px">
+          {/* <PageTitle /> */}
           <NewPostForm />
-          <VStack spacing="16px" w="100%">
+          <VStack w="100%" spacing="0px">
             {posts.map((post) => (
               <PostCard key={post.entityId} post={post} />
             ))}

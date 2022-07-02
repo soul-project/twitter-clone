@@ -1,5 +1,5 @@
 import React from "react";
-import { Box, Divider, Link, Text } from "@chakra-ui/react";
+import { Box, Link, Text } from "@chakra-ui/react";
 import { useQuery } from "react-query";
 
 import { get } from "src/modules/users/get";
@@ -11,7 +11,7 @@ export default function PostCard({ post }: Props) {
   if (!data) return null;
 
   return (
-    <Box w="100%">
+    <Box w="100%" borderBottom="1px solid white" padding="16px 16px">
       {/* TODO: Add created at time as well */}
       <Link display="inline-block">
         <Text fontWeight="bold">{data?.userHandle}</Text>
@@ -22,7 +22,6 @@ export default function PostCard({ post }: Props) {
         Thanks for understanding!
       </Text> */}
       <Text>{post.body}</Text>
-      <Divider mt="8px" />
     </Box>
   );
 }
