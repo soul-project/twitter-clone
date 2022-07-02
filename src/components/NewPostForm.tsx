@@ -15,6 +15,7 @@ import { useMutation } from "react-query";
 import * as Yup from "yup";
 import { useSession } from "next-auth/react";
 import { IoIosSend } from "react-icons/io";
+import ResizeTextarea from "react-textarea-autosize";
 
 import { create, CreateArgs } from "src/modules/posts/create";
 
@@ -61,6 +62,10 @@ export default function NewPostForm() {
                       id="body"
                       placeholder="What's happening?"
                       disabled={props.isSubmitting || !session}
+                      minH="unset"
+                      overflow="hidden"
+                      resize="none"
+                      as={ResizeTextarea}
                     />
                     <FormErrorMessage>{form.errors.body}</FormErrorMessage>
                   </FormControl>
