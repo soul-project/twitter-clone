@@ -22,8 +22,7 @@ export default function Card({ post }: Props) {
             largest: 1,
             round: true,
             units: ["y", "mo", "w", "d", "h", "m"],
-          })}{" "}
-          ago
+          })}
         </Text>
       </HStack>
       <Text>{post.body}</Text>

@@ -1,7 +1,12 @@
 import axios from "axios";
 
-export const getList = async (): Promise<PostList> => {
-  const { data } = await axios.get<PostListData>("/api/posts");
+export const NUM_ITEMS_PER_PAGE = 10;
+
+export const getList = async (args: getListArgs = {}): Promise<PostList> => {
+  console.log("🚀 ~ file: getList.ts ~ line 18 ~ getList ~ args", args);
+  const { data } = await axios.get<PostListData>("/api/posts", {
+    params: { ...args, numItemsPerPage: NUM_ITEMS_PER_PAGE },
+  });
   return {
     ...data,
     posts: data.posts.map((post) => ({
@@ -38,4 +43,8 @@ export type Post = {
 type PostList = {
   posts: Post[];
   totalCount: number;
+};
+
+type getListArgs = {
+  page?: number;
 };

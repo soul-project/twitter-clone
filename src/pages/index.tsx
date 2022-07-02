@@ -5,7 +5,7 @@ import { VStack } from "@chakra-ui/react";
 
 import Head from "src/components/Head";
 import Page from "src/components/Page";
-import NewPostForm from "src/components/NewPostForm";
+import CreateNewPostForm from "src/components/CreateNewPostForm";
 import PostFeed from "src/components/PostFeed";
 
 export async function getServerSideProps(ctx: any) {
@@ -34,7 +34,7 @@ const Home: NextPage = () => {
       >
         <VStack alignItems="flex-start" spacing="0px">
           {/* <PageTitle /> */}
-          <NewPostForm />
+          <CreateNewPostForm />
           <PostFeed />
         </VStack>
       </Page>

@@ -19,7 +19,7 @@ import ResizeTextarea from "react-textarea-autosize";
 
 import { create, CreateArgs } from "src/modules/posts/create";
 
-export default function NewPostForm() {
+export default function CreateNewPostForm() {
   const { mutateAsync } = useMutation<void, void, CreateArgs>((value) =>
     create(value)
   );
@@ -30,6 +30,7 @@ export default function NewPostForm() {
       <Formik
         initialValues={{ body: "" }}
         onSubmit={async (values, actions) => {
+          // TODO: We also want to invalidate the fetch form so that our new post floats to the top
           await mutateAsync(values);
           actions.resetForm();
           actions.setSubmitting(false);

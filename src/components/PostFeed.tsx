@@ -1,22 +1,48 @@
 import React from "react";
-import { Text, VStack } from "@chakra-ui/react";
-import { useQuery } from "react-query";
+import { Text, VStack, Button } from "@chakra-ui/react";
+import { useInfiniteQuery } from "react-query";
 
-import { getList } from "src/modules/posts/getList";
+import { getList, NUM_ITEMS_PER_PAGE } from "src/modules/posts/getList";
 
 import Card from "./PostFeed/Card";
 
 export default function PostFeed() {
-  // TODO: add use query infinite here
-  const { data, isFetching } = useQuery([getList.key], () => getList());
+  const { data, isFetching, fetchNextPage, isFetchingNextPage } =
+    useInfiniteQuery(
+      [getList.key],
+      ({ pageParam = 1 }) => getList({ page: pageParam }),
+      {
+        getNextPageParam: ({ totalCount }, pages) => {
+          const posts = pages.flatMap((page) => page.posts);
+          if (posts.length >= totalCount) {
+            return undefined;
+          }
+          return Math.ceil(posts.length / NUM_ITEMS_PER_PAGE) + 1;
+        },
+        refetchOnWindowFocus: false,
+      }
+    );
 
   if (!data || isFetching) return <Text>loading...</Text>;
 
   return (
-    <VStack w="100%" spacing="0px">
-      {data?.posts.map((post) => (
-        <Card key={post.entityId} post={post} />
-      ))}
+    <VStack spacing="16px" pb="16px">
+      <VStack w="100%" spacing="0px">
+        {data.pages.map((page, i) => (
+          <React.Fragment key={i}>
+            {page.posts.map((post) => (
+              <Card key={post.entityId} post={post} />
+            ))}
+          </React.Fragment>
+        ))}
+      </VStack>
+      <Button
+        onClick={() => fetchNextPage()}
+        isLoading={isFetchingNextPage}
+        variant="link"
+      >
+        Load more...
+      </Button>
     </VStack>
   );
 }
