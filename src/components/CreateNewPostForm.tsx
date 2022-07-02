@@ -11,18 +11,20 @@ import {
   Icon,
 } from "@chakra-ui/react";
 import { Formik, Form, Field, FieldInputProps, FormikProps } from "formik";
-import { useMutation } from "react-query";
+import { useMutation, useQueryClient } from "react-query";
 import * as Yup from "yup";
 import { useSession } from "next-auth/react";
 import { IoIosSend } from "react-icons/io";
 import ResizeTextarea from "react-textarea-autosize";
 
 import { create, CreateArgs } from "src/modules/posts/create";
+import { getList } from "src/modules/posts/getList";
 
 export default function CreateNewPostForm() {
   const { mutateAsync } = useMutation<void, void, CreateArgs>((value) =>
     create(value)
   );
+  const queryClient = useQueryClient();
   const { data: session } = useSession();
 
   return (
@@ -30,10 +32,10 @@ export default function CreateNewPostForm() {
       <Formik
         initialValues={{ body: "" }}
         onSubmit={async (values, actions) => {
-          // TODO: We also want to invalidate the fetch form so that our new post floats to the top
           await mutateAsync(values);
           actions.resetForm();
           actions.setSubmitting(false);
+          queryClient.invalidateQueries(getList.key);
         }}
         validationSchema={Yup.object({
           body: Yup.string()
