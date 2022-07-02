@@ -69,6 +69,11 @@ export default function CreateNewPostForm() {
                       overflow="hidden"
                       resize="none"
                       as={ResizeTextarea}
+                      onKeyDown={(e) => {
+                        if (e.metaKey && e.code === "Enter") {
+                          props.submitForm();
+                        }
+                      }}
                     />
                     <FormErrorMessage>{form.errors.body}</FormErrorMessage>
                   </FormControl>

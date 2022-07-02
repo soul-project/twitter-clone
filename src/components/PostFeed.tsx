@@ -38,7 +38,7 @@ export default function PostFeed() {
     return () => {
       window.removeEventListener("scroll", handleScroll);
     };
-  }, []);
+  }, [fetchNextPage]);
 
   return (
     <VStack spacing="16px" pb="16px" w="100%">
