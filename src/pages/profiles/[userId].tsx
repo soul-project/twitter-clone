@@ -37,8 +37,6 @@ const Profile: NextPage = () => {
         paddingTop="32px"
       >
         <VStack alignItems="flex-start" spacing="0px">
-          {/* TODO: Set title according to the name of the user */}
-          {/* <PageTitle /> */}
           {!isNaN(userId) && <PostFeed userId={userId} />}
         </VStack>
       </Page>

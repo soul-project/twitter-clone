@@ -33,7 +33,6 @@ const Home: NextPage = () => {
         paddingTop="32px"
       >
         <VStack alignItems="flex-start" spacing="0px">
-          {/* <PageTitle /> */}
           <CreateNewPostForm />
           <PostFeed />
         </VStack>

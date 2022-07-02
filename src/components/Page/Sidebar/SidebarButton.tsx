@@ -1,10 +1,10 @@
 import React from "react";
 import { Button, Link } from "@chakra-ui/react";
 
-export default function SidebarButton({ href, icon, title }: Props) {
+export default function SidebarButton({ href, icon, title, onClick }: Props) {
   return (
     <Link href={href}>
-      <Button variant="link" leftIcon={icon} fontSize="2xl">
+      <Button variant="link" leftIcon={icon} fontSize="2xl" onClick={onClick}>
         {title}
       </Button>
     </Link>
@@ -12,7 +12,8 @@ export default function SidebarButton({ href, icon, title }: Props) {
 }
 
 type Props = {
-  href: string;
+  href?: string;
   icon: React.ReactElement<any>;
   title: string;
+  onClick?: () => void;
 };

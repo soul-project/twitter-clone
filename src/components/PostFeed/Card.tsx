@@ -14,7 +14,7 @@ export default function Card({ post }: Props) {
   return (
     <Box w="100%" borderBottom="1px solid white" padding="16px 16px">
       <HStack>
-        <Link display="inline-block">
+        <Link display="inline-block" href={`/profiles/${post.userId}`}>
           <Text fontWeight="bold">{data?.userHandle}</Text>
         </Link>
         <Text>
