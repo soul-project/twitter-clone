@@ -26,11 +26,13 @@ export default function Sidebar() {
       <VStack spacing="48px" alignItems="flex-start">
         <Icon as={BsTwitter} w="32px" h="32px" color="yellow" />
         <SidebarButton title="Home" icon={<Icon as={AiFillHome} />} href="/" />
-        <SidebarButton
-          title="Profile"
-          icon={<Icon as={BsFillPersonFill} />}
-          href="/"
-        />
+        {session && (
+          <SidebarButton
+            title="Profile"
+            icon={<Icon as={BsFillPersonFill} />}
+            href={`/profiles/${session?.user.id}`}
+          />
+        )}
         <SidebarButton title="Tweet" icon={<Icon as={IoIosSend} />} href="/" />
       </VStack>
       {session ? (

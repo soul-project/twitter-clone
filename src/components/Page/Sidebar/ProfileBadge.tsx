@@ -18,7 +18,7 @@ export default function ProfileBadge({
   return (
     <Popover>
       <PopoverTrigger>
-        <Button variant="unstyled" w="auto" h="100%">
+        <Button variant="ghost" w="auto" h="100%" py="8px">
           <HStack>
             <Avatar name={username} />
             <Text fontWeight="bold">{userHandle}</Text>
@@ -28,7 +28,9 @@ export default function ProfileBadge({
       <PopoverContent width="100%">
         <PopoverArrow />
         <PopoverBody>
-          <Button onClick={onSignOut}>Log out {userHandle}</Button>
+          <Button onClick={onSignOut} variant="ghost">
+            Log out {userHandle}
+          </Button>
         </PopoverBody>
       </PopoverContent>
     </Popover>

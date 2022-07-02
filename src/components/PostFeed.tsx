@@ -6,11 +6,11 @@ import { getList, NUM_ITEMS_PER_PAGE } from "src/modules/posts/getList";
 
 import Card from "./PostFeed/Card";
 
-export default function PostFeed() {
+export default function PostFeed({ userId }: Props) {
   const { data, isFetching, fetchNextPage, isFetchingNextPage } =
     useInfiniteQuery(
-      [getList.key],
-      ({ pageParam = 1 }) => getList({ page: pageParam }),
+      [getList.key, { userId }],
+      ({ pageParam = 1 }) => getList({ page: pageParam, userId }),
       {
         getNextPageParam: ({ totalCount }, pages) => {
           const posts = pages.flatMap((page) => page.posts);
@@ -61,3 +61,7 @@ export default function PostFeed() {
     </VStack>
   );
 }
+
+type Props = {
+  userId?: number;
+};

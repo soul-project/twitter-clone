@@ -12,24 +12,33 @@ import * as next from "next";
 import { getSession } from "next-auth/react";
 import { StatusCodes } from "http-status-codes";
 
-import { PaginationQueryParamsDto } from "src/serializers/pagination.dto";
-import { CreatePostBodyDto } from "src/serializers/posts.dto";
+import {
+  CreatePostBodyDto,
+  GetPostListQueryParamsDto,
+} from "src/serializers/posts.dto";
 
 import { PostController } from "./posts/post.controller";
 
 class PostHandler extends PostController {
   @Get()
   async findPosts(
-    @Query(ValidationPipe) queryParams: PaginationQueryParamsDto
+    @Query(ValidationPipe)
+    { page, userId, numItemsPerPage }: GetPostListQueryParamsDto
   ) {
     const postRepository = await this.getPostRepository();
-    const baseQuery = postRepository
-      .search()
-      .sortBy("updatedAt", "DESC").return;
+    let baseQuery = postRepository.search().sortBy("updatedAt", "DESC").return;
+
+    if (userId) {
+      baseQuery = postRepository
+        .search()
+        .where("userId")
+        .equals(userId)
+        .sortBy("updatedAt", "DESC").return;
+    }
 
     const posts = await baseQuery.page(
-      (queryParams.page - 1) * queryParams.numItemsPerPage,
-      queryParams.numItemsPerPage
+      (page - 1) * numItemsPerPage,
+      numItemsPerPage
     );
     const totalCount = await baseQuery.count();
 

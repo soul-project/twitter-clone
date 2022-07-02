@@ -46,4 +46,5 @@ type PostList = {
 
 type getListArgs = {
   page?: number;
+  userId?: number;
 };
