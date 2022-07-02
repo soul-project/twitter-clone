@@ -18,7 +18,7 @@ export default function ProfileBadge({
   return (
     <Popover>
       <PopoverTrigger>
-        <Button variant="unstyled" w="100%" h="100%">
+        <Button variant="unstyled" w="auto" h="100%">
           <HStack>
             <Avatar name={username} />
             <Text fontWeight="bold">{userHandle}</Text>

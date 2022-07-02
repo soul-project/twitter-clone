@@ -6,10 +6,12 @@ import {
   Button,
   HStack,
   Box,
+  Avatar,
 } from "@chakra-ui/react";
 import { Formik, Form, Field, FieldInputProps, FormikProps } from "formik";
 import { useMutation } from "react-query";
 import * as Yup from "yup";
+import { useSession } from "next-auth/react";
 
 import { create, CreateArgs } from "src/modules/posts/create";
 
@@ -17,6 +19,7 @@ export default function NewPostForm() {
   const { mutateAsync } = useMutation<void, void, CreateArgs>((value) =>
     create(value)
   );
+  const { data: session } = useSession();
 
   return (
     <Box padding="16px" borderBottom="1px solid white" w="100%">
@@ -33,7 +36,8 @@ export default function NewPostForm() {
       >
         {(props) => (
           <Form>
-            <HStack alignItems="flex-start">
+            <HStack>
+              <Avatar name={session?.user.username} />
               <Field name="body">
                 {({
                   field,
@@ -49,7 +53,7 @@ export default function NewPostForm() {
                       {...field}
                       id="body"
                       placeholder="What's happening?"
-                      disabled={props.isSubmitting}
+                      disabled={props.isSubmitting || !session}
                     />
                     <FormErrorMessage>{form.errors.body}</FormErrorMessage>
                   </FormControl>
@@ -59,6 +63,7 @@ export default function NewPostForm() {
                 mt={4}
                 colorScheme="teal"
                 isLoading={props.isSubmitting}
+                disabled={!session}
                 type="submit"
               >
                 Submit
