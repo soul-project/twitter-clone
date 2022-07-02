@@ -28,7 +28,7 @@ class PostHandler extends PostController {
       .sortBy("updatedAt", "DESC").return;
 
     const posts = await baseQuery.page(
-      queryParams.page - 1,
+      (queryParams.page - 1) * queryParams.numItemsPerPage,
       queryParams.numItemsPerPage
     );
     const totalCount = await baseQuery.count();

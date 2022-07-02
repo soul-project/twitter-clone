@@ -3,7 +3,6 @@ import axios from "axios";
 export const NUM_ITEMS_PER_PAGE = 10;
 
 export const getList = async (args: getListArgs = {}): Promise<PostList> => {
-  console.log("🚀 ~ file: getList.ts ~ line 18 ~ getList ~ args", args);
   const { data } = await axios.get<PostListData>("/api/posts", {
     params: { ...args, numItemsPerPage: NUM_ITEMS_PER_PAGE },
   });

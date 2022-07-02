@@ -23,22 +23,20 @@ export default function PostFeed() {
       }
     );
 
-  if (!data || isFetching) return <Text>loading...</Text>;
-
   return (
-    <VStack spacing="16px" pb="16px">
-      <VStack w="100%" spacing="0px">
-        {data.pages.map((page, i) => (
-          <React.Fragment key={i}>
-            {page.posts.map((post) => (
+    <VStack spacing="16px" pb="16px" w="100%">
+      {data && (
+        <VStack w="100%" spacing="0px">
+          {data.pages
+            .flatMap((page) => page.posts)
+            .map((post) => (
               <Card key={post.entityId} post={post} />
             ))}
-          </React.Fragment>
-        ))}
-      </VStack>
+        </VStack>
+      )}
       <Button
         onClick={() => fetchNextPage()}
-        isLoading={isFetchingNextPage}
+        isLoading={isFetchingNextPage || isFetching}
         variant="link"
       >
         Load more...
