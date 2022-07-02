@@ -83,7 +83,7 @@ export default function CreateNewPostForm() {
             <HStack justifyContent="flex-end" mt="8px">
               <Button
                 isLoading={props.isSubmitting}
-                disabled={!session}
+                disabled={!session || !props.dirty}
                 type="submit"
                 leftIcon={<Icon as={IoIosSend} />}
               >
