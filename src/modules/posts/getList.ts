@@ -5,6 +5,8 @@ export const getList = async () => {
   return data;
 };
 
+getList.key = "modules/posts/getList";
+
 export type Post = {
   entityId: string;
   userId: number;

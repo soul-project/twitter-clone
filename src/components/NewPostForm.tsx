@@ -7,11 +7,14 @@ import {
   HStack,
   Box,
   Avatar,
+  Textarea,
+  Icon,
 } from "@chakra-ui/react";
 import { Formik, Form, Field, FieldInputProps, FormikProps } from "formik";
 import { useMutation } from "react-query";
 import * as Yup from "yup";
 import { useSession } from "next-auth/react";
+import { IoIosSend } from "react-icons/io";
 
 import { create, CreateArgs } from "src/modules/posts/create";
 
@@ -30,14 +33,18 @@ export default function NewPostForm() {
           actions.resetForm();
           actions.setSubmitting(false);
         }}
-        validationSchema={Yup.object({ body: Yup.string().required() })}
-        validateOnChange={false}
+        validationSchema={Yup.object({
+          body: Yup.string()
+            .required("Post body is required")
+            .max(255, "Must be 255 characters or less"),
+        })}
+        validateOnChange={true}
         validateOnBlur={false}
       >
         {(props) => (
           <Form>
-            <HStack>
-              <Avatar name={session?.user.username} />
+            <HStack spacing="16px">
+              <Avatar name={session?.user.username} alignSelf="flex-start" />
               <Field name="body">
                 {({
                   field,
@@ -49,7 +56,7 @@ export default function NewPostForm() {
                   <FormControl
                     isInvalid={!!form.errors.body && form.touched.body}
                   >
-                    <Input
+                    <Textarea
                       {...field}
                       id="body"
                       placeholder="What's happening?"
@@ -59,14 +66,15 @@ export default function NewPostForm() {
                   </FormControl>
                 )}
               </Field>
+            </HStack>
+            <HStack justifyContent="flex-end" mt="8px">
               <Button
-                mt={4}
-                colorScheme="teal"
                 isLoading={props.isSubmitting}
                 disabled={!session}
                 type="submit"
+                leftIcon={<Icon as={IoIosSend} />}
               >
-                Submit
+                Tweet
               </Button>
             </HStack>
           </Form>
