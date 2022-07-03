@@ -45,7 +45,7 @@ export default function Card({ post }: Props) {
           href={`/profiles/${post.userId}`}
           _hover={{ textDecoration: "non" }}
         >
-          <Avatar name={userData.username} size="md" />
+          <Avatar name={userData.username} size="md" zIndex={-1} />
         </Link>
         <VStack alignItems="flex-start" w="100%">
           <HStack justifyContent="space-between" w="100%">

@@ -1,5 +1,5 @@
 import React from "react";
-import { Button, useDisclosure, VStack } from "@chakra-ui/react";
+import { Button, Link, useDisclosure, VStack } from "@chakra-ui/react";
 import { Icon } from "@chakra-ui/icons";
 import { AiFillHome } from "react-icons/ai";
 import { BsFillPersonFill, BsTwitter } from "react-icons/bs";
@@ -23,14 +23,15 @@ export default function Sidebar() {
         minHeight="100vh"
         paddingTop="32px"
         paddingBottom="32px"
-        w="275px"
         position="sticky"
         top="0px"
       >
         <VStack spacing="48px" alignItems="flex-start">
-          <Button variant="ghost">
-            <Icon as={BsTwitter} w="32px" h="32px" color="yellow" />
-          </Button>
+          <Link href="/">
+            <Button variant="ghost">
+              <Icon as={BsTwitter} w="32px" h="32px" color="yellow" />
+            </Button>
+          </Link>
           <SidebarButton
             title="Home"
             icon={<Icon as={AiFillHome} />}

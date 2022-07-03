@@ -1,17 +1,20 @@
 import React from "react";
-import { Button, Link } from "@chakra-ui/react";
+import { Button, Link, Text } from "@chakra-ui/react";
 
 export default function SidebarButton({ href, icon, title, onClick }: Props) {
   return (
     <Link href={href} _hover={{ textDecoration: "none" }}>
       <Button
         variant="ghost"
-        leftIcon={icon}
         fontSize="2xl"
         onClick={onClick}
-        py="16px"
+        py="12px"
+        height="auto"
       >
-        {title}
+        {icon}
+        <Text ml="20px" display={["none", "none", "none", "inline-block"]}>
+          {title}
+        </Text>
       </Button>
     </Link>
   );
