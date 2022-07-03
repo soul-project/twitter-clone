@@ -41,11 +41,13 @@ export default function Sidebar() {
               href={`/profiles/${session?.user.id}`}
             />
           )}
-          <SidebarButton
-            title="Tweet"
-            icon={<Icon as={IoIosSend} />}
-            onClick={onOpen}
-          />
+          {session && (
+            <SidebarButton
+              title="Tweet"
+              icon={<Icon as={IoIosSend} />}
+              onClick={onOpen}
+            />
+          )}
         </VStack>
         {session ? (
           <ProfileBadge

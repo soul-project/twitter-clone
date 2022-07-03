@@ -20,7 +20,7 @@ export default function ProfileBadge({
       <PopoverTrigger>
         <Button variant="ghost" w="auto" h="100%" py="8px">
           <HStack>
-            <Avatar name={username} />
+            <Avatar name={username} size="sm" />
             <Text fontWeight="bold">{userHandle}</Text>
           </HStack>
         </Button>
