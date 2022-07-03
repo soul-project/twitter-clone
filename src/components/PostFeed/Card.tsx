@@ -21,6 +21,7 @@ import { BsThreeDots } from "react-icons/bs";
 import { get } from "src/modules/users/get";
 import { getList, Post } from "src/modules/posts/getList";
 import { destroy } from "src/modules/posts/destroy";
+import { DeleteIcon } from "@chakra-ui/icons";
 
 export default function Card({ post }: Props) {
   const queryClient = useQueryClient();
@@ -71,7 +72,10 @@ export default function Card({ post }: Props) {
                 Actions
               </MenuButton>
               <MenuList>
-                <MenuItem onClick={() => destroyAsync()}>Delete</MenuItem>
+                <MenuItem onClick={() => destroyAsync()}>
+                  <DeleteIcon mr="12px" color="red" />
+                  <span>Delete</span>
+                </MenuItem>
               </MenuList>
             </Menu>
           </HStack>
