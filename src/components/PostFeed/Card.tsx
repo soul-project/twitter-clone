@@ -3,6 +3,7 @@ import {
   Avatar,
   Box,
   HStack,
+  Icon,
   IconButton,
   Link,
   Menu,
@@ -15,7 +16,7 @@ import {
 import { useMutation, useQuery, useQueryClient } from "react-query";
 import humanizeDuration from "humanize-duration";
 import { useSession } from "next-auth/react";
-import { HamburgerIcon } from "@chakra-ui/icons";
+import { BsThreeDots } from "react-icons/bs";
 
 import { get } from "src/modules/users/get";
 import { getList, Post } from "src/modules/posts/getList";
@@ -63,7 +64,7 @@ export default function Card({ post }: Props) {
               <MenuButton
                 as={IconButton}
                 aria-label="Options"
-                icon={<HamburgerIcon />}
+                icon={<Icon as={BsThreeDots} />}
                 variant="ghost"
                 disabled={session?.user.id !== post.userId}
               >
