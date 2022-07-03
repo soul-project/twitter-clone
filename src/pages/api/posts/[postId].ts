@@ -38,9 +38,9 @@ class PostHandler extends PostController {
     const existingPost = await postRepository.fetch(postId as string);
     const session = await getSession({ req });
 
-    if (existingPost.userId === null) {
+    if (existingPost.userId === null)
       throw new HttpException(StatusCodes.NOT_FOUND);
-    }
+
     if (session?.user.id !== existingPost.userId)
       throw new HttpException(StatusCodes.FORBIDDEN);
 
