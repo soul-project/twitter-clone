@@ -89,6 +89,7 @@ export default function CreateNewPostModal({ onClose, isOpen }: Props) {
                             }
                           }}
                           variant="flushed"
+                          autoFocus
                         />
                         <FormErrorMessage>{form.errors.body}</FormErrorMessage>
                       </FormControl>
