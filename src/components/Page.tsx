@@ -8,15 +8,17 @@ import Sidebar from "./Page/Sidebar";
 export default function Page({ children, title, ...props }: Props) {
   return (
     <main>
-      <Center w={["100vw", "100vw", "100vw", "auto"]}>
-        <HStack alignItems="flex-start" m="0px auto">
-          <Sidebar />
-          <Box minHeight="100vh" maxW="600px" {...props}>
-            <PageTitle title={title} />
-            {children}
-          </Box>
-        </HStack>
-      </Center>
+      <HStack
+        alignItems="flex-start"
+        justifyContent="center"
+        w={["100vw", "100vw", "100vw", "auto"]}
+      >
+        <Sidebar />
+        <Box minHeight="100vh" maxW="600px" flexGrow={2} {...props}>
+          <PageTitle title={title} />
+          {children}
+        </Box>
+      </HStack>
     </main>
   );
 }

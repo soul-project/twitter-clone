@@ -41,7 +41,7 @@ const Profile: NextPage<Props> = ({ userId }) => {
         paddingTop="32px"
         title={userData!.userHandle}
       >
-        <VStack alignItems="flex-start" spacing="0px">
+        <VStack alignItems="flex-start" spacing="0px" w="100%">
           <PostFeed userId={userId} />
         </VStack>
       </Page>
