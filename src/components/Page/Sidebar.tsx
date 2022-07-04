@@ -1,5 +1,5 @@
 import React from "react";
-import { Button, Link, useDisclosure, VStack } from "@chakra-ui/react";
+import { Box, Button, Link, useDisclosure, VStack } from "@chakra-ui/react";
 import { Icon } from "@chakra-ui/icons";
 import { AiFillHome } from "react-icons/ai";
 import { BsFillPersonFill, BsTwitter } from "react-icons/bs";
@@ -10,12 +10,14 @@ import SidebarButton from "./Sidebar/SidebarButton";
 import ProfileBadge from "./Sidebar/ProfileBadge";
 import CreateNewPostModal from "./Sidebar/CreateNewPostModal";
 
-export default function Sidebar() {
+export default function Sidebar({
+  ...props
+}: React.ComponentProps<typeof Box>) {
   const { data: session } = useSession();
   const { isOpen, onOpen, onClose } = useDisclosure();
 
   return (
-    <>
+    <Box {...props} top="0px" position="sticky">
       <CreateNewPostModal onClose={onClose} isOpen={isOpen} />
       <VStack
         alignItems="flex-start"
@@ -63,6 +65,6 @@ export default function Sidebar() {
           <Button onClick={() => signIn("soul")}>Log in</Button>
         )}
       </VStack>
-    </>
+    </Box>
   );
 }

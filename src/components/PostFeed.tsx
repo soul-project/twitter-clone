@@ -51,11 +51,11 @@ export default function PostFeed({ userId }: Props) {
             ))}
         </VStack>
       )}
-      {/* TODO: Only show the button when there's actually more to load */}
       <Button
         onClick={() => fetchNextPage()}
         isLoading={isFetchingNextPage || isFetching}
         variant="link"
+        mt={isFetchingNextPage || isFetching ? "16px" : "0px"}
       >
         Load more...
       </Button>

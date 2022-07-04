@@ -1,5 +1,4 @@
-import { Box, Center, HStack, Spinner } from "@chakra-ui/react";
-import { useRouter } from "next/router";
+import { Box, HStack } from "@chakra-ui/react";
 import React from "react";
 
 import PageTitle from "./Page/PageTitle";
@@ -12,9 +11,20 @@ export default function Page({ children, title, ...props }: Props) {
         alignItems="flex-start"
         justifyContent="center"
         w={["100vw", "100vw", "100vw", "auto"]}
+        spacing="0px"
       >
-        <Sidebar />
-        <Box minHeight="100vh" maxW="600px" flexGrow={2} {...props}>
+        <Sidebar display={["none", "block"]} />
+        <Box
+          minHeight="100vh"
+          maxW="600px"
+          minW="0px"
+          w="100%"
+          flexGrow={1}
+          borderLeft={["none", "1px solid white"]}
+          borderRight={["none", "1px solid white"]}
+          paddingTop="32px"
+          {...props}
+        >
           <PageTitle title={title} />
           {children}
         </Box>

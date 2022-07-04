@@ -47,38 +47,61 @@ export default function Card({ post }: Props) {
         >
           <Avatar name={userData.username} size="md" zIndex={-1} />
         </Link>
-        <VStack alignItems="flex-start" w="100%">
-          {/* TODO: Make this grow the same with ellipsis maybe so that they'll always be visible */}
-          <HStack justifyContent="space-between" w="100%">
-            <HStack>
-              <Link display="inline-block" href={`/profiles/${post.userId}`}>
-                <Text fontWeight="bold">{userData?.userHandle}</Text>
-              </Link>
-              <Text>
-                {humanizeDuration(Date.now() - post.createdAt.getTime(), {
-                  largest: 1,
-                  round: true,
-                  units: ["y", "mo", "w", "d", "h", "m"],
-                })}
-              </Text>
-            </HStack>
-            <Menu>
-              <MenuButton
-                as={IconButton}
-                aria-label="Options"
-                icon={<Icon as={BsThreeDots} />}
-                variant="ghost"
-                disabled={session?.user.id !== post.userId}
+        <VStack alignItems="flex-start" minW="0px" w="100%">
+          <HStack
+            justifyContent="space-between"
+            spacing="16px"
+            w="100%"
+            minW="0px"
+          >
+            <Link
+              display="inline-block"
+              href={`/profiles/${post.userId}`}
+              flexShrink={1}
+              overflow="hidden"
+            >
+              <Text
+                fontWeight="bold"
+                whiteSpace="nowrap"
+                textOverflow="ellipsis"
+                overflow="hidden"
               >
-                Actions
-              </MenuButton>
-              <MenuList>
-                <MenuItem onClick={() => destroyAsync()}>
-                  <DeleteIcon mr="12px" color="red" />
-                  <span>Delete</span>
-                </MenuItem>
-              </MenuList>
-            </Menu>
+                {userData?.userHandle}
+              </Text>
+            </Link>
+            <Text
+              flexShrink={0}
+              whiteSpace="nowrap"
+              textOverflow="ellipsis"
+              overflow="hidden"
+              flexGrow={1}
+            >
+              {humanizeDuration(Date.now() - post.createdAt.getTime(), {
+                largest: 1,
+                round: true,
+                units: ["y", "mo", "w", "d", "h", "m"],
+              })}
+            </Text>
+            <Box flexShrink={0}>
+              <Menu>
+                <MenuButton
+                  as={IconButton}
+                  aria-label="Options"
+                  icon={<Icon as={BsThreeDots} />}
+                  variant="ghost"
+                  disabled={session?.user.id !== post.userId}
+                  flexShrink={0}
+                >
+                  Actions
+                </MenuButton>
+                <MenuList>
+                  <MenuItem onClick={() => destroyAsync()}>
+                    <DeleteIcon mr="12px" color="red" />
+                    <span>Delete</span>
+                  </MenuItem>
+                </MenuList>
+              </Menu>
+            </Box>
           </HStack>
           <Text>{post.body}</Text>
         </VStack>

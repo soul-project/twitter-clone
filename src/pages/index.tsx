@@ -27,13 +27,8 @@ const Home: NextPage = () => {
   return (
     <>
       <Head />
-      <Page
-        borderLeft="1px solid white"
-        borderRight="1px solid white"
-        paddingTop="32px"
-        title="Home"
-      >
-        <VStack alignItems="flex-start" spacing="0px">
+      <Page title="Home">
+        <VStack alignItems="flex-start" spacing="0px" w="100%">
           <CreateNewPostForm />
           <PostFeed />
         </VStack>

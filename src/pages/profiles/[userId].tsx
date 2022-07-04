@@ -35,12 +35,7 @@ const Profile: NextPage<Props> = ({ userId }) => {
   return (
     <>
       <Head />
-      <Page
-        borderLeft="1px solid white"
-        borderRight="1px solid white"
-        paddingTop="32px"
-        title={userData!.userHandle}
-      >
+      <Page title={userData!.userHandle}>
         <VStack alignItems="flex-start" spacing="0px" w="100%">
           <PostFeed userId={userId} />
         </VStack>
