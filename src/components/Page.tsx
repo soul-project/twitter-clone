@@ -8,15 +8,10 @@ import Sidebar from "./Page/Sidebar";
 export default function Page({ children, title, ...props }: Props) {
   return (
     <main>
-      <Center>
+      <Center w={["100vw", "100vw", "100vw", "auto"]}>
         <HStack alignItems="flex-start" m="0px auto">
           <Sidebar />
-          <Box
-            minHeight="100vh"
-            maxW="600px"
-            w={["auto", "auto", "auto", "600px"]}
-            {...props}
-          >
+          <Box minHeight="100vh" maxW="600px" {...props}>
             <PageTitle title={title} />
             {children}
           </Box>
