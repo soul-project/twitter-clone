@@ -47,7 +47,7 @@ export default function Sidebar() {
           )}
           {session && (
             <SidebarButton
-              title="Tweet"
+              title="Post"
               icon={<Icon as={IoIosSend} />}
               onClick={onOpen}
             />

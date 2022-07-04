@@ -88,7 +88,7 @@ export default function CreateNewPostForm() {
                 type="submit"
                 leftIcon={<Icon as={IoIosSend} />}
               >
-                Tweet
+                Post
               </Button>
             </HStack>
           </Form>

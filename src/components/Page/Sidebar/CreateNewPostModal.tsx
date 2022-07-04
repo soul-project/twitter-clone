@@ -104,7 +104,7 @@ export default function CreateNewPostModal({ onClose, isOpen }: Props) {
                   type="submit"
                   leftIcon={<Icon as={IoIosSend} />}
                 >
-                  Tweet
+                  Post
                 </Button>
               </ModalFooter>
             </Form>
