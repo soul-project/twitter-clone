@@ -1,17 +1,23 @@
-import { Box, Center, HStack } from "@chakra-ui/react";
+import { Box, Center, HStack, Spinner } from "@chakra-ui/react";
+import { useRouter } from "next/router";
 import React from "react";
 
 import PageTitle from "./Page/PageTitle";
 import Sidebar from "./Page/Sidebar";
 
-export default function Page({ children, ...props }: Props) {
+export default function Page({ children, title, ...props }: Props) {
   return (
     <main>
       <Center>
         <HStack alignItems="flex-start" m="0px auto">
           <Sidebar />
-          <Box minHeight="100vh" width="600px" {...props}>
-            <PageTitle />
+          <Box
+            minHeight="100vh"
+            maxW="600px"
+            w={["auto", "auto", "auto", "600px"]}
+            {...props}
+          >
+            <PageTitle title={title} />
             {children}
           </Box>
         </HStack>
@@ -22,4 +28,5 @@ export default function Page({ children, ...props }: Props) {
 
 type Props = {
   children: React.ReactNode;
+  title: string;
 } & React.ComponentProps<typeof Box>;

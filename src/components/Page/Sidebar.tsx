@@ -25,8 +25,9 @@ export default function Sidebar() {
         paddingBottom="32px"
         position="sticky"
         top="0px"
+        marginLeft="12px"
       >
-        <VStack spacing="48px" alignItems="flex-start">
+        <VStack spacing="32px" alignItems="flex-start">
           <Link href="/">
             <Button variant="ghost">
               <Icon as={BsTwitter} w="32px" h="32px" color="yellow" />

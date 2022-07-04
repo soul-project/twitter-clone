@@ -48,6 +48,7 @@ export default function Card({ post }: Props) {
           <Avatar name={userData.username} size="md" zIndex={-1} />
         </Link>
         <VStack alignItems="flex-start" w="100%">
+          {/* TODO: Make this grow the same with ellipsis maybe so that they'll always be visible */}
           <HStack justifyContent="space-between" w="100%">
             <HStack>
               <Link display="inline-block" href={`/profiles/${post.userId}`}>
