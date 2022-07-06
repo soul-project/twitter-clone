@@ -1,5 +1,5 @@
 import React from "react";
-import { Box, Button, Link, useDisclosure, VStack } from "@chakra-ui/react";
+import { Box, Button, Link, VStack } from "@chakra-ui/react";
 import { Icon } from "@chakra-ui/icons";
 import { AiFillHome } from "react-icons/ai";
 import { BsFillPersonFill, BsTwitter } from "react-icons/bs";
@@ -8,17 +8,15 @@ import { signIn, signOut, useSession } from "next-auth/react";
 
 import SidebarButton from "./Sidebar/SidebarButton";
 import ProfileBadge from "./Sidebar/ProfileBadge";
-import CreateNewPostModal from "./Sidebar/CreateNewPostModal";
 
 export default function Sidebar({
+  onOpenCreatePostModal,
   ...props
-}: React.ComponentProps<typeof Box>) {
+}: React.ComponentProps<typeof Box> & Props) {
   const { data: session } = useSession();
-  const { isOpen, onOpen, onClose } = useDisclosure();
 
   return (
     <Box {...props} top="0px" position="sticky">
-      <CreateNewPostModal onClose={onClose} isOpen={isOpen} />
       <VStack
         alignItems="flex-start"
         justifyContent="space-between"
@@ -51,7 +49,7 @@ export default function Sidebar({
             <SidebarButton
               title="Post"
               icon={<Icon as={IoIosSend} />}
-              onClick={onOpen}
+              onClick={onOpenCreatePostModal}
             />
           )}
         </VStack>
@@ -68,3 +66,7 @@ export default function Sidebar({
     </Box>
   );
 }
+
+type Props = {
+  onOpenCreatePostModal: () => void;
+};

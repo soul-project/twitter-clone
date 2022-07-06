@@ -1,19 +1,36 @@
-import { Box, HStack } from "@chakra-ui/react";
+import { Box, HStack, useDisclosure } from "@chakra-ui/react";
 import React from "react";
+import NavbarMobile from "./Page/NavbarMobile";
 
 import PageTitle from "./Page/PageTitle";
 import Sidebar from "./Page/Sidebar";
+import CreateNewPostModal from "./Page/Sidebar/CreateNewPostModal";
 
 export default function Page({ children, title, ...props }: Props) {
+  const {
+    isOpen: isOpenCreatePostModal,
+    onOpen: onOpenCreatePostModal,
+    onClose: onCloseCreatePostModal,
+  } = useDisclosure();
+
   return (
     <main>
+      <CreateNewPostModal
+        onCloseCreatePostModal={onCloseCreatePostModal}
+        isOpenCreatePostModal={isOpenCreatePostModal}
+      />
       <HStack
         alignItems="flex-start"
         justifyContent="center"
         w={["100vw", "100vw", "100vw", "auto"]}
         spacing="0px"
       >
-        <Sidebar display={["none", "block"]} mr="16px" />
+        <Sidebar
+          display={["none", "block"]}
+          mr="16px"
+          onOpenCreatePostModal={onOpenCreatePostModal}
+        />
+        <NavbarMobile onOpenCreatePostModal={onOpenCreatePostModal} />
         <Box
           minHeight="100vh"
           maxW="600px"
@@ -26,7 +43,7 @@ export default function Page({ children, title, ...props }: Props) {
           {...props}
         >
           <PageTitle title={title} />
-          {children}
+          <Box mb={["64px", "0px"]}>{children}</Box>
         </Box>
       </HStack>
     </main>

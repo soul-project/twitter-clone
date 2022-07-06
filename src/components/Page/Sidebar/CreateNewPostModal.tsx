@@ -25,7 +25,7 @@ import ResizeTextarea from "react-textarea-autosize";
 import { create, CreateArgs } from "src/modules/posts/create";
 import { getList } from "src/modules/posts/getList";
 
-export default function CreateNewPostModal({ onClose, isOpen }: Props) {
+export default function CreateNewPostModal({ onCloseCreatePostModal: onClose, isOpenCreatePostModal: isOpen }: Props) {
   const { mutateAsync } = useMutation<void, void, CreateArgs>((value) =>
     create(value)
   );
@@ -35,7 +35,7 @@ export default function CreateNewPostModal({ onClose, isOpen }: Props) {
   return (
     <Modal isOpen={isOpen} onClose={onClose} size="lg">
       <ModalOverlay />
-      <ModalContent>
+      <ModalContent minH={["80vh", "0px"]}>
         <ModalCloseButton />
         <ModalHeader />
         <Formik
@@ -116,6 +116,6 @@ export default function CreateNewPostModal({ onClose, isOpen }: Props) {
 }
 
 type Props = {
-  isOpen: boolean;
-  onClose: () => void;
+  isOpenCreatePostModal: boolean;
+  onCloseCreatePostModal: () => void;
 };
