@@ -1,8 +1,10 @@
 import { useState } from "react";
 import type { AppProps } from "next/app";
-import { ChakraProvider, extendTheme } from "@chakra-ui/react";
+import { ChakraProvider } from "@chakra-ui/react";
 import { SessionProvider } from "next-auth/react";
 import { Hydrate, QueryClient, QueryClientProvider } from "react-query";
+
+import theme from "src/theme";
 
 function MyApp({
   Component,
@@ -14,11 +16,7 @@ function MyApp({
     <SessionProvider session={session}>
       <QueryClientProvider client={queryClient}>
         <Hydrate state={dehydratedState}>
-          <ChakraProvider
-            theme={extendTheme({
-              config: { initialColorMode: "dark", useSystemColorMode: false },
-            })}
-          >
+          <ChakraProvider theme={theme}>
             <Component {...pageProps} />
           </ChakraProvider>
         </Hydrate>

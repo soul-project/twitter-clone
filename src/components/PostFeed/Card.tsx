@@ -38,12 +38,16 @@ export default function Card({ post }: Props) {
   if (!userData) return null;
 
   return (
-    <Box w="100%" borderBottom="1px solid white" padding="16px 16px">
+    <Box
+      w="100%"
+      borderBottom="1px solid var(--chakra-colors-border-gray)"
+      padding="16px 16px"
+    >
       <HStack alignItems="flex-start">
         <Link
           display="inline-block"
           href={`/profiles/${post.userId}`}
-          _hover={{ textDecoration: "non" }}
+          _hover={{ textDecoration: "none" }}
         >
           <Avatar name={userData.username} size="md" zIndex={-1} />
         </Link>

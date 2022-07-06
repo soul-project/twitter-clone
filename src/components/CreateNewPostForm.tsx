@@ -28,7 +28,11 @@ export default function CreateNewPostForm() {
   const { data: session } = useSession();
 
   return (
-    <Box padding="16px" borderBottom="1px solid white" w="100%">
+    <Box
+      padding="16px"
+      borderBottom="1px solid var(--chakra-colors-border-gray)"
+      w="100%"
+    >
       <Formik
         initialValues={{ body: "" }}
         onSubmit={async (values, actions) => {

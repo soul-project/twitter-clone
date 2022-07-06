@@ -13,15 +13,15 @@ export default function Page({ children, title, ...props }: Props) {
         w={["100vw", "100vw", "100vw", "auto"]}
         spacing="0px"
       >
-        <Sidebar display={["none", "block"]} />
+        <Sidebar display={["none", "block"]} mr="16px" />
         <Box
           minHeight="100vh"
           maxW="600px"
           minW="0px"
           w="100%"
           flexGrow={1}
-          borderLeft={["none", "1px solid white"]}
-          borderRight={["none", "1px solid white"]}
+          borderLeft={["none", "1px solid var(--chakra-colors-border-gray)"]}
+          borderRight={["none", "1px solid var(--chakra-colors-border-gray)"]}
           paddingTop="32px"
           {...props}
         >
