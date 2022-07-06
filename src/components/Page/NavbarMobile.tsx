@@ -14,11 +14,12 @@ export default function NavbarMobile({ onOpenCreatePostModal }: Props) {
       position="fixed"
       bottom="0"
       w="100%"
-      bgColor="black"
+      bgColor="gray.800"
       zIndex={999}
       padding="12px"
       justifyContent="center"
       spacing="48px"
+      borderTop="1px solid var(--chakra-colors-border-gray)"
     >
       <Link
         href={`/profiles/${session?.user.id}`}
