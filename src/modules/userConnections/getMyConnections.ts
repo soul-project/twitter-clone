@@ -1,10 +1,12 @@
 import axios from "axios";
 import { Session } from "next-auth";
 
+export const NUM_ITEMS_PER_PAGE = 100;
+
 export const getMyConnections = async ({
   session,
   page = 1,
-  numItemsPerPage = 100,
+  numItemsPerPage = NUM_ITEMS_PER_PAGE,
 }: getMyConnectionsArgs) => {
   const { data: userConnectionsData } =
     await axios.get<UserConnectionsListData>(
@@ -23,9 +25,10 @@ export const getMyConnections = async ({
   return {
     userConnections: userConnectionsData.user_connections.map(
       (userConnection) => ({
-        id: userConnection.to_user.id,
+        id: userConnection.id,
         username: userConnection.to_user.username,
         userHandle: userConnection.to_user.user_handle,
+        userId: userConnection.to_user.id,
       })
     ),
     totalCount: userConnectionsData.total_count,
@@ -35,6 +38,7 @@ export const getMyConnections = async ({
 getMyConnections.key = "modules/users/getMyConnections";
 
 type UserConnectionsData = {
+  id: number;
   to_user: {
     id: number;
     username: string;

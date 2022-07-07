@@ -4,6 +4,7 @@ import { Icon } from "@chakra-ui/icons";
 import { AiFillHome } from "react-icons/ai";
 import { BsFillPersonFill, BsTwitter } from "react-icons/bs";
 import { IoIosSend } from "react-icons/io";
+import { FaUserFriends } from "react-icons/fa";
 import { signIn, signOut, useSession } from "next-auth/react";
 
 import SidebarButton from "./Sidebar/SidebarButton";
@@ -43,6 +44,13 @@ export default function Sidebar({
               title="Profile"
               icon={<Icon as={BsFillPersonFill} />}
               href={`/profiles/${session?.user.id}`}
+            />
+          )}
+          {session && (
+            <SidebarButton
+              title="Following"
+              icon={<Icon as={FaUserFriends} />}
+              href="/following"
             />
           )}
           {session && (

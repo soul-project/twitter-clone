@@ -45,6 +45,14 @@ export default function DrawerMobile({ isOpen, onClose }: Props) {
               </Link>
             )}
             <Divider />
+            {session && (
+              <>
+                <Link href="/following">
+                  <Button variant="link">Following</Button>
+                </Link>
+                <Divider />
+              </>
+            )}
             <Button
               onClick={() => (session ? signOut() : signIn("soul"))}
               variant="link"

@@ -41,7 +41,7 @@ export default function Card({ post }: Props) {
     <Box
       w="100%"
       borderBottom="1px solid var(--chakra-colors-border-gray)"
-      padding="16px 16px"
+      padding="16px"
     >
       <HStack alignItems="flex-start">
         <Link

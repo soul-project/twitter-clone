@@ -17,7 +17,10 @@ export default function FollowButton({ userId, session }: Props) {
     useQuery(
       [getConnectionByUsers.key, getUserConnectionByUserIdArgs],
       () => getConnectionByUsers(getUserConnectionByUserIdArgs),
-      { enabled: !!session && session.user.id !== userId }
+      {
+        enabled: !!session && session.user.id !== userId,
+        refetchOnWindowFocus: false,
+      }
     );
 
   const { mutate: destroyConnection, isLoading: isLoadingDestroyConnection } =

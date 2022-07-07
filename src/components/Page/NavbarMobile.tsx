@@ -21,22 +21,26 @@ export default function NavbarMobile({ onOpenCreatePostModal }: Props) {
       spacing="48px"
       borderTop="1px solid var(--chakra-colors-border-gray)"
     >
-      <Link
-        href={`/profiles/${session?.user.id}`}
-        _hover={{ textDecoration: "none" }}
-      >
-        <Button variant="ghost">
-          <Icon as={BsFillPersonFill} height="26px" width="26px" />
-        </Button>
-      </Link>
+      {session && (
+        <Link
+          href={`/profiles/${session?.user.id}`}
+          _hover={{ textDecoration: "none" }}
+        >
+          <Button variant="ghost">
+            <Icon as={BsFillPersonFill} height="26px" width="26px" />
+          </Button>
+        </Link>
+      )}
       <Link href="/" _hover={{ textDecoration: "none" }}>
         <Button variant="ghost">
           <Icon as={AiFillHome} height="26px" width="26px" />
         </Button>
       </Link>
-      <Button variant="ghost" onClick={onOpenCreatePostModal}>
-        <Icon as={IoIosSend} height="26px" width="26px" />
-      </Button>
+      {session && (
+        <Button variant="ghost" onClick={onOpenCreatePostModal}>
+          <Icon as={IoIosSend} height="26px" width="26px" />
+        </Button>
+      )}
     </HStack>
   );
 }
