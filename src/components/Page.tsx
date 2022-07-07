@@ -1,5 +1,6 @@
-import { Box, HStack, useDisclosure } from "@chakra-ui/react";
 import React from "react";
+import { Box, HStack, useDisclosure } from "@chakra-ui/react";
+import DrawerMobile from "./Page/DrawerMobile";
 import NavbarMobile from "./Page/NavbarMobile";
 
 import PageTitle from "./Page/PageTitle";
@@ -11,6 +12,11 @@ export default function Page({ children, title, ...props }: Props) {
     isOpen: isOpenCreatePostModal,
     onOpen: onOpenCreatePostModal,
     onClose: onCloseCreatePostModal,
+  } = useDisclosure();
+  const {
+    isOpen: isOpenMobileDrawer,
+    onOpen: onOpenMobileDrawer,
+    onClose: onCloseMobileDrawer,
   } = useDisclosure();
 
   return (
@@ -31,6 +37,10 @@ export default function Page({ children, title, ...props }: Props) {
           onOpenCreatePostModal={onOpenCreatePostModal}
         />
         <NavbarMobile onOpenCreatePostModal={onOpenCreatePostModal} />
+        <DrawerMobile
+          isOpen={isOpenMobileDrawer}
+          onClose={onCloseMobileDrawer}
+        />
         <Box
           minHeight="100vh"
           maxW="600px"
@@ -39,10 +49,9 @@ export default function Page({ children, title, ...props }: Props) {
           flexGrow={1}
           borderLeft={["none", "1px solid var(--chakra-colors-border-gray)"]}
           borderRight={["none", "1px solid var(--chakra-colors-border-gray)"]}
-          paddingTop="32px"
           {...props}
         >
-          <PageTitle title={title} />
+          <PageTitle title={title} onOpenMobileDrawer={onOpenMobileDrawer} />
           <Box mb={["64px", "0px"]}>{children}</Box>
         </Box>
       </HStack>
