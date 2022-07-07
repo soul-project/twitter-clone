@@ -17,11 +17,11 @@ import { useMutation, useQuery, useQueryClient } from "react-query";
 import humanizeDuration from "humanize-duration";
 import { useSession } from "next-auth/react";
 import { BsThreeDots } from "react-icons/bs";
+import { DeleteIcon } from "@chakra-ui/icons";
 
 import { get } from "src/modules/users/get";
 import { getList, Post } from "src/modules/posts/getList";
 import { destroy } from "src/modules/posts/destroy";
-import { DeleteIcon } from "@chakra-ui/icons";
 
 export default function Card({ post }: Props) {
   const queryClient = useQueryClient();

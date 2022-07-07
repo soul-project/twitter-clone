@@ -1,10 +1,10 @@
 import { Button } from "@chakra-ui/react";
 import { useMutation, useQuery, useQueryClient } from "react-query";
+import { Session } from "next-auth";
 
 import { destroy } from "src/modules/userConnections/destroy";
 import { create } from "src/modules/userConnections/create";
 import { getConnectionByUsers } from "src/modules/userConnections/getConnectionByUsers";
-import { Session } from "next-auth";
 
 export default function FollowButton({ userId, session }: Props) {
   const queryClient = useQueryClient();
