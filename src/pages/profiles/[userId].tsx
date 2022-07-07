@@ -1,13 +1,14 @@
 import { useEffect } from "react";
 import type { NextPage } from "next";
 import { getSession, signOut, useSession } from "next-auth/react";
-import { VStack } from "@chakra-ui/react";
+import { HStack, VStack } from "@chakra-ui/react";
 import { dehydrate, QueryClient, useQuery } from "react-query";
 
 import PostFeed from "src/components/PostFeed";
 import Head from "src/components/Head";
 import Page from "src/components/Page";
 import { get } from "src/modules/users/get";
+import FollowButton from "src/components/FollowButton";
 
 export async function getServerSideProps(ctx: any) {
   const queryClient = new QueryClient();
@@ -17,7 +18,6 @@ export async function getServerSideProps(ctx: any) {
   if (isNaN(userId)) throw new Error("Invalid userId");
 
   await queryClient.prefetchQuery([get.key, userId], () => get(userId));
-
   return {
     props: { session, userId, dehydratedState: dehydrate(queryClient) },
   };
@@ -30,12 +30,22 @@ const Profile: NextPage<Props> = ({ userId }) => {
       signOut();
     }
   }, [session]);
+
   const { data: userData } = useQuery([get.key, userId], () => get(userId));
 
   return (
     <>
       <Head />
       <Page title={userData!.userHandle}>
+        {session && userId !== session.user.id ? (
+          <HStack
+            w="100%"
+            padding="16px"
+            justifyContent={["flex-start", "flex-end"]}
+          >
+            <FollowButton userId={userId} session={session!} />
+          </HStack>
+        ) : null}
         <VStack alignItems="flex-start" spacing="0px" w="100%">
           <PostFeed userId={userId} />
         </VStack>
