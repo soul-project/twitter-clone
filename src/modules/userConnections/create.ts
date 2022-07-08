@@ -1,10 +1,10 @@
 import axios from "axios";
 import { Session } from "next-auth";
 
-export const create = async ({ fromUserId, toUserId, session }: CreateArgs) => {
+export const create = async ({ toUserId, session }: CreateArgs) => {
   await axios.post(
     "https://api.soul-network.com/v1/user-connections",
-    { from_user_id: fromUserId, to_user_id: toUserId },
+    { from_user_id: session.user.id, to_user_id: toUserId },
     {
       headers: {
         "Content-Type": "application/json",
@@ -15,7 +15,6 @@ export const create = async ({ fromUserId, toUserId, session }: CreateArgs) => {
 };
 
 type CreateArgs = {
-  fromUserId: number;
   toUserId: number;
   session: Session;
 };

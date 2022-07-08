@@ -38,7 +38,6 @@ export default function FollowButton({ userId, session }: Props) {
   const { mutate: createConnection, isLoading: isLoadingCreateConnection } =
     useMutation(async () => {
       await create({
-        fromUserId: session.user.id,
         toUserId: userId,
         session: session!,
       });
