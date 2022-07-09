@@ -2,7 +2,7 @@ import NextAuth from "next-auth";
 import { JWT } from "next-auth/jwt";
 import axios from "axios";
 
-const CLIENT_ID = 3;
+const CLIENT_ID = process.env.SOUL_PLATFORM_ID;
 
 const getNewTokenFromServer = async (
   refreshToken: string
