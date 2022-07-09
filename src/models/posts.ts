@@ -15,3 +15,31 @@ export const postSchema = new Schema(Post, {
   createdAt: { type: "date", sortable: true },
   updatedAt: { type: "date", sortable: true },
 });
+
+export const postRxSchema = {
+  title: "post schema",
+  version: 0,
+  primaryKey: "entityId",
+  type: "object",
+  properties: {
+    entityId: {
+      type: "string",
+      maxLength: 100,
+    },
+    body: {
+      type: "string",
+      maxLength: 500,
+    },
+    userId: {
+      type: "integer",
+    },
+    createdAt: {
+      type: "integer",
+    },
+    updatedAt: {
+      type: "integer",
+    },
+  },
+  required: ["entityId", "body", "userId", "createdAt", "updatedAt"],
+  indexes: ["createdAt", "updatedAt"],
+};
