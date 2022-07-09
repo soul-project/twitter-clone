@@ -18,14 +18,10 @@ export class BaseController {
 
   async getRxDbClient() {
     if (!this.rxClient) {
-      // if (process.env.NODE_ENV !== "production") {
-      //   await import("rxdb/plugins/dev-mode").then((module) =>
-      //     addRxPlugin(module as any)
-      //   );
-      // }
       this.rxClient = await createRxDatabase({
         name: "twitter-clone-db",
         storage: getRxStorageLoki(),
+        ignoreDuplicate: true,
       });
     }
     return this.rxClient;

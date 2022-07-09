@@ -1,5 +1,6 @@
 import { Repository } from "redis-om";
 import { RxCollection } from "rxdb";
+import { v4 as uuidv4 } from "uuid";
 
 import { Post, postRxSchema, postSchema } from "src/models/posts";
 
@@ -20,7 +21,7 @@ export class PostController extends BaseController {
   async getRxPostRepository() {
     const client = await this.getRxDbClient();
     if (!client.collections.posts) {
-      client.addCollections({ posts: { schema: postRxSchema } });
+      await client.addCollections({ posts: { schema: postRxSchema } });
       this.postRxRepository = client.collections.posts;
     }
     return this.postRxRepository;
