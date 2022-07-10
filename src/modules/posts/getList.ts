@@ -22,8 +22,8 @@ type PostData = {
   entityId: string;
   userId: number;
   body: string;
-  createdAt: string;
-  updatedAt: string;
+  createdAt: number;
+  updatedAt: number;
 };
 
 type PostListData = {

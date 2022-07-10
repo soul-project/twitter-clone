@@ -1,25 +1,15 @@
-import { Entity, Schema } from "redis-om";
-
-export interface Post {
+export type Post = {
+  entityId: string;
   body: string;
   userId: number;
-  createdAt: Date;
-  updatedAt: Date;
-}
+  createdAt: number;
+  updatedAt: number;
+};
 
-export class Post extends Entity {}
-
-export const postSchema = new Schema(Post, {
-  body: { type: "text" },
-  userId: { type: "number" },
-  createdAt: { type: "date", sortable: true },
-  updatedAt: { type: "date", sortable: true },
-});
-
-export const postRxSchema = {
+export const postSchema = {
   title: "post schema",
   version: 0,
-  primaryKey: "entityId",
+  primaryKey: "entityId", // TODO: Check if this will be auto appended anyway
   type: "object",
   properties: {
     entityId: {

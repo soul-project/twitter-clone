@@ -11,6 +11,7 @@ import {
 import * as next from "next";
 import { getSession } from "next-auth/react";
 import { StatusCodes } from "http-status-codes";
+import { v4 as uuid } from "uuid";
 
 import {
   CreatePostBodyDto,
@@ -25,24 +26,22 @@ class PostHandler extends PostController {
     @Query(ValidationPipe)
     { page, userId, numItemsPerPage }: GetPostListQueryParamsDto
   ) {
-    const postRepository = await this.getPostRepository();
-    let baseQuery = postRepository.search().sortBy("updatedAt", "DESC").return;
+    const postRxRepository = await this.getPostRepository();
+    const results = await postRxRepository
+      ?.find({
+        limit: numItemsPerPage,
+        skip: numItemsPerPage * (page - 1),
+        sort: [{ updatedAt: "desc" }],
+        selector: {
+          ...(userId && { userId: userId }),
+        },
+      })
+      .exec();
 
-    if (userId) {
-      baseQuery = postRepository
-        .search()
-        .where("userId")
-        .equals(userId)
-        .sortBy("updatedAt", "DESC").return;
-    }
+    const totalCount = (await postRxRepository?.find().exec())?.length || 0;
+    const posts = (results || []).map((doc) => doc.toJSON());
 
-    const posts = await baseQuery.page(
-      (page - 1) * numItemsPerPage,
-      numItemsPerPage
-    );
-    const totalCount = await baseQuery.count();
-
-    return { posts, totalCount };
+    return { posts: posts, totalCount };
   }
 
   @Post()
@@ -50,19 +49,21 @@ class PostHandler extends PostController {
     @Req() req: next.NextApiRequest,
     @Body(ValidationPipe) body: CreatePostBodyDto
   ) {
-    const postRepository = await this.getPostRepository();
     const session = await getSession({ req });
 
     if (!session?.user.id) throw new HttpException(StatusCodes.FORBIDDEN);
 
-    const newPost = await postRepository.createAndSave({
+    const postRxRepository = await this.getPostRepository();
+
+    const newPost = await postRxRepository?.insert({
+      entityId: uuid(),
       userId: session.user.id,
       body: body.body,
-      createdAt: new Date(),
-      updatedAt: new Date(),
+      createdAt: new Date().getTime(),
+      updatedAt: new Date().getTime(),
     });
 
-    return newPost.toJSON();
+    return newPost!.toJSON();
   }
 }
 
