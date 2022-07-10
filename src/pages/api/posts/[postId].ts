@@ -20,17 +20,17 @@ class PostHandler extends PostController {
     const session = await getSession({ req });
 
     const postRxRepository = await this.getPostRepository();
-    const existingPostQuery = postRxRepository?.findOne({
+    const existingPostQuery = postRxRepository.findOne({
       selector: { entityId: postId },
     });
-    const existingPost = await existingPostQuery?.exec();
+    const existingPost = await existingPostQuery.exec();
 
     if (!existingPost) throw new HttpException(StatusCodes.NOT_FOUND);
 
     if (existingPost.get("userId") !== session?.user.id)
       throw new HttpException(StatusCodes.FORBIDDEN);
 
-    await existingPostQuery?.remove();
+    await existingPostQuery.remove();
     return;
   }
 }

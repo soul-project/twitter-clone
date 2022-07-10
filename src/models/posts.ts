@@ -9,7 +9,7 @@ export type Post = {
 export const postSchema = {
   title: "post schema",
   version: 0,
-  primaryKey: "entityId", // TODO: Check if this will be auto appended anyway
+  primaryKey: "entityId",
   type: "object",
   properties: {
     entityId: {

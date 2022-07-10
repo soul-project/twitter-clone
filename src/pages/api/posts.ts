@@ -28,7 +28,7 @@ class PostHandler extends PostController {
   ) {
     const postRxRepository = await this.getPostRepository();
     const results = await postRxRepository
-      ?.find({
+      .find({
         limit: numItemsPerPage,
         skip: numItemsPerPage * (page - 1),
         sort: [{ updatedAt: "desc" }],
@@ -38,8 +38,9 @@ class PostHandler extends PostController {
       })
       .exec();
 
-    const totalCount = (await postRxRepository?.find().exec())?.length || 0;
-    const posts = (results || []).map((doc) => doc.toJSON());
+    // TODO: Optimize counting in the future
+    const totalCount = (await postRxRepository.find().exec()).length;
+    const posts = results.map((doc) => doc.toJSON());
 
     return { posts: posts, totalCount };
   }
@@ -55,7 +56,7 @@ class PostHandler extends PostController {
 
     const postRxRepository = await this.getPostRepository();
 
-    const newPost = await postRxRepository?.insert({
+    const newPost = await postRxRepository.insert({
       entityId: uuid(),
       userId: session.user.id,
       body: body.body,
