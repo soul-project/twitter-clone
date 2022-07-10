@@ -21,7 +21,7 @@ import FollowButton from "./FollowButton";
 export default function FollowingList() {
   const { data: session } = useSession();
 
-  const { data, isFetching, fetchNextPage, isFetchingNextPage } =
+  const { data, isFetching, fetchNextPage, isFetchingNextPage, hasNextPage } =
     useInfiniteQuery(
       [getMyConnections.key, { session }],
       ({ pageParam = 1 }) =>
@@ -103,7 +103,7 @@ export default function FollowingList() {
               isLoading={isFetchingNextPage || isFetching}
               variant="link"
             >
-              Load more...
+              {hasNextPage ? "Load more..." : "Nothing else to show here 🎉"}
             </Button>
           </Box>
         </VStack>

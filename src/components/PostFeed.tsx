@@ -1,5 +1,5 @@
 import React, { useEffect } from "react";
-import { Text, VStack, Button } from "@chakra-ui/react";
+import { VStack, Button } from "@chakra-ui/react";
 import { useInfiniteQuery } from "react-query";
 
 import { getList, NUM_ITEMS_PER_PAGE } from "src/modules/posts/getList";
@@ -7,7 +7,7 @@ import { getList, NUM_ITEMS_PER_PAGE } from "src/modules/posts/getList";
 import Card from "./PostFeed/Card";
 
 export default function PostFeed({ userId }: Props) {
-  const { data, isFetching, fetchNextPage, isFetchingNextPage } =
+  const { data, isFetching, fetchNextPage, isFetchingNextPage, hasNextPage } =
     useInfiniteQuery(
       [getList.key, { userId }],
       ({ pageParam = 1 }) => getList({ page: pageParam, userId }),
@@ -57,7 +57,7 @@ export default function PostFeed({ userId }: Props) {
         variant="link"
         mt={isFetchingNextPage || isFetching ? "16px" : "0px"}
       >
-        Load more...
+        {hasNextPage ? "Load more..." : "Nothing else to show here 🎉"}
       </Button>
     </VStack>
   );
