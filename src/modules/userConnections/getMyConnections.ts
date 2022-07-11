@@ -7,6 +7,7 @@ export const getMyConnections = async ({
   session,
   page = 1,
   numItemsPerPage = NUM_ITEMS_PER_PAGE,
+  connectionType,
 }: getMyConnectionsArgs) => {
   const { data: userConnectionsData } =
     await axios.get<UserConnectionsListData>(
@@ -18,7 +19,7 @@ export const getMyConnections = async ({
         params: {
           page,
           num_items_per_page: numItemsPerPage,
-          connection_type: "follow",
+          connection_type: connectionType,
         },
       }
     );
@@ -26,9 +27,17 @@ export const getMyConnections = async ({
     userConnections: userConnectionsData.user_connections.map(
       (userConnection) => ({
         id: userConnection.id,
-        username: userConnection.to_user.username,
-        userHandle: userConnection.to_user.user_handle,
-        userId: userConnection.to_user.id,
+        ...(connectionType === "following"
+          ? {
+              username: userConnection.to_user.username,
+              userHandle: userConnection.to_user.user_handle,
+              userId: userConnection.to_user.id,
+            }
+          : {
+              username: userConnection.from_user.username,
+              userHandle: userConnection.from_user.user_handle,
+              userId: userConnection.from_user.id,
+            }),
       })
     ),
     totalCount: userConnectionsData.total_count,
@@ -44,6 +53,11 @@ type UserConnectionsData = {
     username: string;
     user_handle: string;
   };
+  from_user: {
+    id: number;
+    username: string;
+    user_handle: string;
+  };
 };
 
 type UserConnectionsListData = {
@@ -55,4 +69,7 @@ type getMyConnectionsArgs = {
   page?: number;
   numItemsPerPage?: number;
   session: Session;
+  connectionType: "following" | "follower";
 };
+
+export type ConnectionType = "following" | "follower";

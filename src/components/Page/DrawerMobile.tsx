@@ -47,8 +47,8 @@ export default function DrawerMobile({ isOpen, onClose }: Props) {
             <Divider />
             {session && (
               <>
-                <Link href="/following">
-                  <Button variant="link">Following</Button>
+                <Link href="/connections">
+                  <Button variant="link">Connections</Button>
                 </Link>
                 <Divider />
               </>

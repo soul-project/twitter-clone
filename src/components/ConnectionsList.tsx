@@ -12,20 +12,25 @@ import {
 } from "@chakra-ui/react";
 
 import {
+  ConnectionType,
   getMyConnections,
   NUM_ITEMS_PER_PAGE,
 } from "src/modules/userConnections/getMyConnections";
 
 import FollowButton from "./FollowButton";
 
-export default function FollowingList() {
+export default function FollowingList({ connectionType }: Props) {
   const { data: session } = useSession();
 
   const { data, isFetching, fetchNextPage, isFetchingNextPage, hasNextPage } =
     useInfiniteQuery(
-      [getMyConnections.key, { session }],
+      [getMyConnections.key, { session, connectionType }],
       ({ pageParam = 1 }) =>
-        getMyConnections({ page: pageParam, session: session! }),
+        getMyConnections({
+          page: pageParam,
+          session: session!,
+          connectionType,
+        }),
       {
         getNextPageParam: ({ totalCount }, pages) => {
           const userConnections = pages.flatMap((page) => page.userConnections);
@@ -111,3 +116,7 @@ export default function FollowingList() {
     </VStack>
   );
 }
+
+type Props = {
+  connectionType: ConnectionType;
+};

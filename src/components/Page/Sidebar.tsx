@@ -48,9 +48,9 @@ export default function Sidebar({
           )}
           {session && (
             <SidebarButton
-              title="Following"
+              title="Connections"
               icon={<Icon as={FaUserFriends} />}
-              href="/following"
+              href="/connections"
             />
           )}
           {session && (
