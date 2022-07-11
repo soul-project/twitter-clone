@@ -42,9 +42,9 @@ export default function CreateNewPostModal({ onCloseCreatePostModal: onClose, is
           initialValues={{ body: "" }}
           onSubmit={async (values, actions) => {
             await mutateAsync(values);
+            await queryClient.invalidateQueries(getList.key);
             actions.resetForm();
             actions.setSubmitting(false);
-            queryClient.invalidateQueries(getList.key);
             onClose();
           }}
           validationSchema={Yup.object({
