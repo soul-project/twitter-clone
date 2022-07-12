@@ -64,6 +64,8 @@ class PostHandler extends PostController {
       updatedAt: new Date().getTime(),
     });
 
+    await this.syncCouchDB();
+
     return newPost!.toJSON();
   }
 }

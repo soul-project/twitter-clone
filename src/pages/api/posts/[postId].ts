@@ -31,6 +31,8 @@ class PostHandler extends PostController {
       throw new HttpException(StatusCodes.FORBIDDEN);
 
     await existingPostQuery.remove();
+
+    await this.syncCouchDB();
     return;
   }
 }
