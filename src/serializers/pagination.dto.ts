@@ -7,11 +7,11 @@ export class PaginationQueryParamsDto {
   @IsInt()
   @Min(1)
   @Max(100)
-  numItemsPerPage = 10;
+  limit = 10;
 
   @Type(() => Number)
   @IsOptional()
   @IsInt()
   @Min(1)
-  page = 1;
+  cursor = new Date().getTime();
 }

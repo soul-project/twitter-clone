@@ -7,17 +7,10 @@ import Head from "src/components/Head";
 import Page from "src/components/Page";
 import CreateNewPostForm from "src/components/CreateNewPostForm";
 import PostFeed from "src/components/PostFeed";
-// import { getList } from "src/modules/posts/getList";
 
 export async function getServerSideProps(ctx: any) {
   const session = await getSession(ctx);
   const queryClient = new QueryClient();
-
-  // TODO: Figure out how to get this to work
-  // await queryClient.prefetchInfiniteQuery(
-  //   [getList.key, { userId: undefined }],
-  //   () => getList({ page: 1 })
-  // );
 
   return {
     props: { session, dehydratedState: dehydrate(queryClient) },

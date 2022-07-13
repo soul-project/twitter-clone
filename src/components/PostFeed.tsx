@@ -2,7 +2,7 @@ import React, { useEffect } from "react";
 import { VStack, Button } from "@chakra-ui/react";
 import { useInfiniteQuery } from "react-query";
 
-import { getList, NUM_ITEMS_PER_PAGE } from "src/modules/posts/getList";
+import { getList } from "src/modules/posts/getList";
 
 import Card from "./PostFeed/Card";
 
@@ -10,14 +10,12 @@ export default function PostFeed({ userId }: Props) {
   const { data, isFetching, fetchNextPage, isFetchingNextPage, hasNextPage } =
     useInfiniteQuery(
       [getList.key, { userId }],
-      ({ pageParam = 1 }) => getList({ page: pageParam, userId }),
+      ({ pageParam = new Date().getTime() }) =>
+        getList({ cursor: pageParam, userId }),
       {
-        getNextPageParam: ({ totalCount }, pages) => {
-          const posts = pages.flatMap((page) => page.posts);
-          if (posts.length >= totalCount) {
-            return undefined;
-          }
-          return Math.ceil(posts.length / NUM_ITEMS_PER_PAGE) + 1;
+        getNextPageParam: (curr) => {
+          if (curr.posts.length === 0) return undefined;
+          return curr.posts[curr.posts.length - 1].createdAt.getTime();
         },
         refetchOnWindowFocus: false,
       }

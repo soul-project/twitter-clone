@@ -18,7 +18,11 @@ export class PostController extends BaseController {
     return this.postRepository!;
   }
 
-  async syncCouchDB(args?: { limit?: number; skip?: number; userId?: number }) {
+  async syncCouchDB(args?: {
+    limit?: number;
+    cusror?: number;
+    userId?: number;
+  }) {
     if (
       !process.env.COUCH_DB_USERNAME ||
       !process.env.COUCH_DB_PASSWORD ||
@@ -45,10 +49,14 @@ export class PostController extends BaseController {
         },
         query: postRepository.find({
           limit: args?.limit || 10,
-          skip: args?.skip || 0,
           sort: [{ updatedAt: "desc" }],
           selector: {
             ...(args?.userId && { userId: args.userId }),
+            ...(args?.cusror && {
+              createdAt: {
+                $lt: args.cusror,
+              },
+            }),
           },
         }),
       });

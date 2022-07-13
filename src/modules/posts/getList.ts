@@ -4,7 +4,7 @@ export const NUM_ITEMS_PER_PAGE = 10;
 
 export const getList = async (args: getListArgs = {}): Promise<PostList> => {
   const { data } = await axios.get<PostListData>("/api/posts", {
-    params: { ...args, numItemsPerPage: NUM_ITEMS_PER_PAGE },
+    params: { ...args, limit: NUM_ITEMS_PER_PAGE },
   });
   return {
     ...data,
@@ -28,7 +28,6 @@ type PostData = {
 
 type PostListData = {
   posts: PostData[];
-  totalCount: number;
 };
 
 export type Post = {
@@ -41,10 +40,9 @@ export type Post = {
 
 type PostList = {
   posts: Post[];
-  totalCount: number;
 };
 
 type getListArgs = {
-  page?: number;
+  cursor?: number;
   userId?: number;
 };

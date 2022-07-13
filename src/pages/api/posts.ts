@@ -24,31 +24,28 @@ class PostHandler extends PostController {
   @Get()
   async findPosts(
     @Query(ValidationPipe)
-    { page, userId, numItemsPerPage }: GetPostListQueryParamsDto
+    { limit, userId, cursor }: GetPostListQueryParamsDto
   ) {
     const postRxRepository = await this.getPostRepository();
     const results = await postRxRepository
       .find({
-        limit: numItemsPerPage,
-        skip: numItemsPerPage * (page - 1),
-        sort: [{ updatedAt: "desc" }],
+        limit,
+        sort: [{ createdAt: "desc" }],
         selector: {
           ...(userId && { userId: userId }),
+          createdAt: { $lt: cursor },
         },
       })
       .exec();
 
     await this.syncCouchDB({
       userId,
-      limit: numItemsPerPage * page, // Exponential sync
-      skip: numItemsPerPage * (page - 1),
+      limit, // Exponential sync
     });
 
-    // TODO: Optimize counting in the future
-    const totalCount = (await postRxRepository.find().exec()).length;
     const posts = results.map((doc) => doc.toJSON());
 
-    return { posts: posts, totalCount };
+    return { posts: posts };
   }
 
   @Post()
