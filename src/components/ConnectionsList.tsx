@@ -105,7 +105,7 @@ export default function FollowingList({ connectionType }: Props) {
           <Box padding="16px">
             <Button
               onClick={() => fetchNextPage()}
-              isLoading={isFetchingNextPage || isFetching}
+              isLoading={isFetchingNextPage || isFetching || !data}
               variant="link"
             >
               {hasNextPage ? "Load more..." : "Nothing else to show here 🎉"}

@@ -40,6 +40,8 @@ export default function PostFeed({ userId }: Props) {
     };
   }, [fetchNextPage]);
 
+  const isLoading = isFetchingNextPage || isFetching || !data;
+
   return (
     <VStack spacing="16px" pb="16px" w="100%">
       {data && (
@@ -53,9 +55,9 @@ export default function PostFeed({ userId }: Props) {
       )}
       <Button
         onClick={() => fetchNextPage()}
-        isLoading={isFetchingNextPage || isFetching}
+        isLoading={isLoading}
         variant="link"
-        mt={isFetchingNextPage || isFetching ? "16px" : "0px"}
+        mt={isLoading ? "16px" : "0px"}
       >
         {hasNextPage ? "Load more..." : "Nothing else to show here 🎉"}
       </Button>
