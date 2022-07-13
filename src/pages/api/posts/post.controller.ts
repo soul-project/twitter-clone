@@ -14,7 +14,6 @@ export class PostController extends BaseController {
         posts: { schema: postSchema },
       });
       this.postRepository = collection.posts;
-      await this.syncCouchDB();
     }
     return this.postRepository!;
   }
