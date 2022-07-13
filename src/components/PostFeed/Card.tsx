@@ -107,7 +107,7 @@ export default function Card({ post }: Props) {
               </Menu>
             </Box>
           </HStack>
-          <Text>{post.body}</Text>
+          <Text overflowWrap="anywhere">{post.body}</Text>
         </VStack>
       </HStack>
     </Box>
