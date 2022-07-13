@@ -32,7 +32,7 @@ class PostHandler extends PostController {
 
     await existingPostQuery.remove();
 
-    await this.syncCouchDB();
+    await this.pushChangesToCouchDB();
     return;
   }
 }

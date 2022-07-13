@@ -9,18 +9,9 @@ import CreateNewPostForm from "src/components/CreateNewPostForm";
 import PostFeed from "src/components/PostFeed";
 // import { getList } from "src/modules/posts/getList";
 
-import { PostController } from "./api/posts/post.controller";
-
 export async function getServerSideProps(ctx: any) {
   const session = await getSession(ctx);
   const queryClient = new QueryClient();
-
-  const postController = new PostController();
-  const postRepository = await postController.getPostRepository();
-
-  await postController.syncCouchDB(
-    postRepository.find({ limit: 10, skip: 0, sort: [{ updatedAt: "desc" }] })
-  );
 
   // TODO: Figure out how to get this to work
   // await queryClient.prefetchInfiniteQuery(

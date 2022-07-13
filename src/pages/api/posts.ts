@@ -38,6 +38,12 @@ class PostHandler extends PostController {
       })
       .exec();
 
+    await this.syncCouchDB({
+      userId,
+      limit: numItemsPerPage * page, // Exponential sync
+      skip: numItemsPerPage * (page - 1),
+    });
+
     // TODO: Optimize counting in the future
     const totalCount = (await postRxRepository.find().exec()).length;
     const posts = results.map((doc) => doc.toJSON());
@@ -64,7 +70,7 @@ class PostHandler extends PostController {
       updatedAt: new Date().getTime(),
     });
 
-    await this.syncCouchDB();
+    await this.pushChangesToCouchDB();
 
     return newPost!.toJSON();
   }
