@@ -10,6 +10,12 @@ let postRepository: RxCollection<Post> | undefined = undefined;
 let rxClient: RxDatabase | undefined = undefined;
 let postReplicationStateLive: RxCouchDBReplicationState | undefined = undefined;
 
+const isCouchDBProvided =
+  process.env.COUCH_DB_USERNAME &&
+  process.env.COUCH_DB_PASSWORD &&
+  process.env.COUCH_DB_HOST &&
+  process.env.COUCH_DB_PORT !== undefined;
+
 export async function getRxDbClient() {
   if (!rxClient) {
     addPouchPlugin(require("pouchdb-adapter-memory"));
@@ -43,16 +49,9 @@ export async function syncCouchDBForPost(args?: {
   cursor?: number;
   userId?: number;
 }) {
-  if (
-    !process.env.COUCH_DB_USERNAME ||
-    !process.env.COUCH_DB_PASSWORD ||
-    !process.env.COUCH_DB_HOST ||
-    !process.env.COUCH_DB_PORT
-  ) {
-    return;
-  }
+  if (!isCouchDBProvided) return;
+  if (!postRepository) await getPostRepository();
 
-  const postRepository = await getPostRepository();
   const postReplicationState = postRepository!.syncCouchDB({
     remote:
       `http://${process.env.COUCH_DB_USERNAME}:${process.env.COUCH_DB_PASSWORD}` +
@@ -77,14 +76,7 @@ export async function syncCouchDBForPost(args?: {
 }
 
 export function initLiveSyncCouchDBForPost() {
-  if (
-    !process.env.COUCH_DB_USERNAME ||
-    !process.env.COUCH_DB_PASSWORD ||
-    !process.env.COUCH_DB_HOST ||
-    !process.env.COUCH_DB_PORT
-  ) {
-    return;
-  }
+  if (!isCouchDBProvided) return;
 
   if (postReplicationStateLive) return postReplicationStateLive;
 

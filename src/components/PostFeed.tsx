@@ -40,6 +40,8 @@ export default function PostFeed({ userId }: Props) {
 
   const isLoading = isFetchingNextPage || isFetching || !data;
 
+  // TODO: Maybe just have something really creative like a click button to refetch and then
+  // let folks know to refresh until they see something here while explaining what's going on
   return (
     <VStack spacing="16px" pb="16px" w="100%">
       {data && (
