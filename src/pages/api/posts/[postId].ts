@@ -8,7 +8,7 @@ import * as next from "next";
 import { StatusCodes } from "http-status-codes";
 import { getSession } from "next-auth/react";
 
-import { PostController } from "./post.controller";
+import PostController from "src/modules/api/postController";
 
 class PostHandler extends PostController {
   @Delete()

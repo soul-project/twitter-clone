@@ -1,7 +1,7 @@
 import { Type } from "class-transformer";
 import { IsInt, IsOptional, MaxLength, MinLength } from "class-validator";
 
-import { PaginationQueryParamsDto } from "./pagination.dto";
+import { PaginationQueryParamsDto } from "./pagination";
 
 export class CreatePostBodyDto {
   @MaxLength(255)

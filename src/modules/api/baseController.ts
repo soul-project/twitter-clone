@@ -2,7 +2,8 @@ import { addRxPlugin, createRxDatabase, RxDatabase } from "rxdb";
 import { addPouchPlugin, getRxStoragePouch } from "rxdb/plugins/pouchdb";
 import { RxDBReplicationCouchDBPlugin } from "rxdb/plugins/replication-couchdb";
 import { RxDBLeaderElectionPlugin } from "rxdb/plugins/leader-election";
-export class BaseController {
+
+export default class BaseController {
   rxClient: RxDatabase | undefined = undefined;
 
   async getRxDbClient() {

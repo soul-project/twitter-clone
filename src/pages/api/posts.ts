@@ -16,9 +16,8 @@ import { v4 as uuid } from "uuid";
 import {
   CreatePostBodyDto,
   GetPostListQueryParamsDto,
-} from "src/serializers/posts.dto";
-
-import { PostController } from "./posts/post.controller";
+} from "src/modules/api/serializers/posts";
+import PostController from "src/modules/api/postController";
 
 class PostHandler extends PostController {
   @Get()

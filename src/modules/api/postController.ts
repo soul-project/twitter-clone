@@ -2,9 +2,9 @@ import { RxCollection, RxDocument, RxQuery } from "rxdb";
 
 import { Post, postSchema } from "src/models/posts";
 
-import { BaseController } from "../common/base.controller";
+import BaseController from "./baseController";
 
-export class PostController extends BaseController {
+export default class PostController extends BaseController {
   postRepository: RxCollection<Post> | undefined = undefined;
 
   async getPostRepository(): Promise<RxCollection<Post>> {
@@ -23,6 +23,7 @@ export class PostController extends BaseController {
     cusror?: number;
     userId?: number;
   }) {
+    console.log("called");
     if (
       !process.env.COUCH_DB_USERNAME ||
       !process.env.COUCH_DB_PASSWORD ||
@@ -44,7 +45,7 @@ export class PostController extends BaseController {
           push: true,
         },
         options: {
-          live: true,
+          live: false,
           retry: true,
         },
         query: postRepository.find({
