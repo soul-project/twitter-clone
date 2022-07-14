@@ -8,7 +8,7 @@ import { Post, postSchema } from "src/models/posts";
 
 let postRepository: RxCollection<Post> | undefined = undefined;
 let rxClient: RxDatabase | undefined = undefined;
-let postReplicationState: RxCouchDBReplicationState | undefined = undefined;
+let postReplicationStateLive: RxCouchDBReplicationState | undefined = undefined;
 
 export async function getRxDbClient() {
   if (!rxClient) {
@@ -34,16 +34,11 @@ export async function getPostRepository(): Promise<RxCollection<Post>> {
     });
     postRepository = collection.posts;
   }
-  return postRepository!;
+  initLiveSyncCouchDBForPost();
+  return postRepository;
 }
 
-export async function getSyncedPostRepository(): Promise<RxCollection<Post>> {
-  await getPostRepository();
-  await syncCouchDBForPostRepository();
-  return postRepository!;
-}
-
-export async function syncCouchDBForPostRepository(args?: {
+export async function syncCouchDBForPost(args?: {
   limit?: number;
   cursor?: number;
   userId?: number;
@@ -57,22 +52,14 @@ export async function syncCouchDBForPostRepository(args?: {
     return;
   }
 
-  if (postReplicationState) return postReplicationState;
-
-  postReplicationState = postRepository!.syncCouchDB({
+  const postRepository = await getPostRepository();
+  const postReplicationState = postRepository!.syncCouchDB({
     remote:
       `http://${process.env.COUCH_DB_USERNAME}:${process.env.COUCH_DB_PASSWORD}` +
       `@${process.env.COUCH_DB_HOST}:${process.env.COUCH_DB_PORT}/${process.env.DB_NAME}/`,
-    waitForLeadership: true,
-    direction: {
-      pull: true,
-      push: true,
-    },
-    options: {
-      live: true,
-      retry: true,
-      batches_limit: 10,
-    },
+    waitForLeadership: false,
+    direction: { pull: true, push: false },
+    options: { live: false, retry: true },
     query: postRepository!.find({
       limit: args?.limit || 10,
       sort: [{ updatedAt: "desc" }],
@@ -86,5 +73,34 @@ export async function syncCouchDBForPostRepository(args?: {
       },
     }),
   });
-  return postReplicationState;
+  return postReplicationState.awaitInitialReplication();
+}
+
+export function initLiveSyncCouchDBForPost() {
+  if (
+    !process.env.COUCH_DB_USERNAME ||
+    !process.env.COUCH_DB_PASSWORD ||
+    !process.env.COUCH_DB_HOST ||
+    !process.env.COUCH_DB_PORT
+  ) {
+    return;
+  }
+
+  if (postReplicationStateLive) return postReplicationStateLive;
+
+  postReplicationStateLive = postRepository!.syncCouchDB({
+    remote:
+      `http://${process.env.COUCH_DB_USERNAME}:${process.env.COUCH_DB_PASSWORD}` +
+      `@${process.env.COUCH_DB_HOST}:${process.env.COUCH_DB_PORT}/${process.env.DB_NAME}/`,
+    waitForLeadership: true,
+    direction: {
+      pull: true,
+      push: true,
+    },
+    options: {
+      live: true,
+      retry: true,
+    },
+  });
+  return postReplicationStateLive;
 }

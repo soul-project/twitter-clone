@@ -9,6 +9,7 @@ import Head from "src/components/Head";
 import Page from "src/components/Page";
 import { get } from "src/modules/users/get";
 import FollowButton from "src/components/FollowButton";
+import { getPostRepository, syncCouchDBForPost } from "src/modules/api/utils";
 
 export async function getServerSideProps(ctx: any) {
   const queryClient = new QueryClient();
@@ -16,6 +17,9 @@ export async function getServerSideProps(ctx: any) {
   const userId = parseInt(ctx.params.userId);
 
   if (isNaN(userId)) throw new Error("Invalid userId");
+
+  await getPostRepository();
+  await syncCouchDBForPost({ cursor: new Date().getTime(), limit: 10, userId });
 
   await queryClient.prefetchQuery([get.key, userId], () => get(userId));
   return {

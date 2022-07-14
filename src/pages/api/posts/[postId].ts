@@ -8,7 +8,7 @@ import * as next from "next";
 import { StatusCodes } from "http-status-codes";
 import { getSession } from "next-auth/react";
 
-import { getSyncedPostRepository } from "src/modules/api/utils";
+import { getPostRepository } from "src/modules/api/utils";
 
 class PostHandler {
   @Delete()
@@ -19,7 +19,7 @@ class PostHandler {
 
     const session = await getSession({ req });
 
-    const postRxRepository = await getSyncedPostRepository();
+    const postRxRepository = await getPostRepository();
     const existingPostQuery = postRxRepository.findOne({
       selector: { entityId: postId },
     });

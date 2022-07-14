@@ -17,7 +17,7 @@ import {
   CreatePostBodyDto,
   GetPostListQueryParamsDto,
 } from "src/modules/api/serializers/posts";
-import { getSyncedPostRepository } from "src/modules/api/utils";
+import { getPostRepository } from "src/modules/api/utils";
 
 class PostHandler {
   @Get()
@@ -25,7 +25,7 @@ class PostHandler {
     @Query(ValidationPipe)
     { limit, userId, cursor }: GetPostListQueryParamsDto
   ) {
-    const postRxRepository = await getSyncedPostRepository();
+    const postRxRepository = await getPostRepository();
     const results = await postRxRepository
       .find({
         limit,
@@ -38,8 +38,7 @@ class PostHandler {
       .exec();
 
     const posts = results.map((doc) => doc.toJSON());
-
-    return { posts: posts };
+    return { posts };
   }
 
   @Post()
@@ -51,7 +50,7 @@ class PostHandler {
 
     if (!session?.user.id) throw new HttpException(StatusCodes.FORBIDDEN);
 
-    const postRxRepository = await getSyncedPostRepository();
+    const postRxRepository = await getPostRepository();
 
     const newPost = await postRxRepository.insert({
       entityId: uuid(),
