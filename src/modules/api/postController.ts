@@ -23,7 +23,6 @@ export default class PostController extends BaseController {
     cursor?: number;
     userId?: number;
   }) {
-    console.log("called");
     if (
       !process.env.COUCH_DB_USERNAME ||
       !process.env.COUCH_DB_PASSWORD ||
@@ -47,8 +46,8 @@ export default class PostController extends BaseController {
         options: {
           live: false,
           retry: true,
-          batch_size: 1, // only transfer one document per batch
-          batches_limit: 1, // only one batch in parallel
+          // batch_size: 1, // only transfer one document per batch
+          // batches_limit: 1, // only one batch in parallel
         },
         query: postRepository.find({
           limit: args?.limit || 10,
