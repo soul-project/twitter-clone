@@ -37,10 +37,7 @@ class PostHandler extends PostController {
       })
       .exec();
 
-    await this.syncCouchDB({
-      userId,
-      limit, // Exponential sync
-    });
+    await this.syncCouchDB({ userId, limit, cursor });
 
     const posts = results.map((doc) => doc.toJSON());
 

@@ -20,7 +20,7 @@ export default class PostController extends BaseController {
 
   async syncCouchDB(args?: {
     limit?: number;
-    cusror?: number;
+    cursor?: number;
     userId?: number;
   }) {
     console.log("called");
@@ -47,15 +47,17 @@ export default class PostController extends BaseController {
         options: {
           live: false,
           retry: true,
+          batch_size: 1, // only transfer one document per batch
+          batches_limit: 1, // only one batch in parallel
         },
         query: postRepository.find({
           limit: args?.limit || 10,
           sort: [{ updatedAt: "desc" }],
           selector: {
             ...(args?.userId && { userId: args.userId }),
-            ...(args?.cusror && {
+            ...(args?.cursor && {
               createdAt: {
-                $lt: args.cusror,
+                $lt: args.cursor,
               },
             }),
           },
