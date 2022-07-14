@@ -8,9 +8,9 @@ import * as next from "next";
 import { StatusCodes } from "http-status-codes";
 import { getSession } from "next-auth/react";
 
-import PostController from "src/modules/api/postController";
+import { getSyncedPostRepository } from "src/modules/api/utils";
 
-class PostHandler extends PostController {
+class PostHandler {
   @Delete()
   async deletePost(@Req() req: next.NextApiRequest): Promise<void> {
     const {
@@ -19,7 +19,7 @@ class PostHandler extends PostController {
 
     const session = await getSession({ req });
 
-    const postRxRepository = await this.getPostRepository();
+    const postRxRepository = await getSyncedPostRepository();
     const existingPostQuery = postRxRepository.findOne({
       selector: { entityId: postId },
     });
@@ -32,7 +32,6 @@ class PostHandler extends PostController {
 
     await existingPostQuery.remove();
 
-    await this.pushChangesToCouchDB();
     return;
   }
 }

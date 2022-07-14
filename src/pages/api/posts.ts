@@ -17,15 +17,15 @@ import {
   CreatePostBodyDto,
   GetPostListQueryParamsDto,
 } from "src/modules/api/serializers/posts";
-import PostController from "src/modules/api/postController";
+import { getSyncedPostRepository } from "src/modules/api/utils";
 
-class PostHandler extends PostController {
+class PostHandler {
   @Get()
   async findPosts(
     @Query(ValidationPipe)
     { limit, userId, cursor }: GetPostListQueryParamsDto
   ) {
-    const postRxRepository = await this.getPostRepository();
+    const postRxRepository = await getSyncedPostRepository();
     const results = await postRxRepository
       .find({
         limit,
@@ -36,8 +36,6 @@ class PostHandler extends PostController {
         },
       })
       .exec();
-
-    await this.syncCouchDB({ userId, limit, cursor });
 
     const posts = results.map((doc) => doc.toJSON());
 
@@ -53,7 +51,7 @@ class PostHandler extends PostController {
 
     if (!session?.user.id) throw new HttpException(StatusCodes.FORBIDDEN);
 
-    const postRxRepository = await this.getPostRepository();
+    const postRxRepository = await getSyncedPostRepository();
 
     const newPost = await postRxRepository.insert({
       entityId: uuid(),
@@ -62,8 +60,6 @@ class PostHandler extends PostController {
       createdAt: new Date().getTime(),
       updatedAt: new Date().getTime(),
     });
-
-    await this.pushChangesToCouchDB();
 
     return newPost!.toJSON();
   }
