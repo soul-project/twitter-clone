@@ -18,10 +18,12 @@ import humanizeDuration from "humanize-duration";
 import { useSession } from "next-auth/react";
 import { BsThreeDots } from "react-icons/bs";
 import { DeleteIcon } from "@chakra-ui/icons";
+import Linkify from "linkify-react";
 
 import { get } from "src/modules/users/get";
 import { getList, Post } from "src/modules/posts/getList";
 import { destroy } from "src/modules/posts/destroy";
+import styled from "@emotion/styled";
 
 export default function Card({ post }: Props) {
   const queryClient = useQueryClient();
@@ -107,9 +109,16 @@ export default function Card({ post }: Props) {
               </Menu>
             </Box>
           </HStack>
-          <Text overflowWrap="anywhere" wordBreak="break-word">
-            {post.body}
-          </Text>
+          <BodyText overflowWrap="anywhere" wordBreak="break-word">
+            <Linkify
+              tagName="p"
+              options={{
+                target: { url: "_blank" },
+              }}
+            >
+              {post.body}
+            </Linkify>
+          </BodyText>
         </VStack>
       </HStack>
     </Box>
@@ -119,3 +128,9 @@ export default function Card({ post }: Props) {
 type Props = {
   post: Post;
 };
+
+const BodyText = styled(Text)`
+  a {
+    text-decoration: underline;
+  }
+`;
