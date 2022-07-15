@@ -8,7 +8,7 @@ export default function PageTitle({ title, onOpenMobileDrawer }: Props) {
       paddingY="32px"
       position="sticky"
       top="0px"
-      bgColor="gray.800"
+      bgColor="var(--chakra-colors-chakra-body-bg)"
       spacing="16px"
       zIndex={999}
     >
