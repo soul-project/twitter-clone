@@ -39,18 +39,21 @@ export async function getPostRepository(): Promise<RxCollection<Post>> {
       posts: { schema: postSchema },
     });
     postRepository = collection.posts;
+    await initialSyncCouchDBForPost({
+      cursor: new Date().getTime(),
+      limit: 10,
+    });
   }
   initLiveSyncCouchDBForPost();
   return postRepository;
 }
 
-export async function syncCouchDBForPost(args?: {
+export async function initialSyncCouchDBForPost(args?: {
   limit?: number;
   cursor?: number;
   userId?: number;
 }) {
   if (!isCouchDBProvided) return;
-  if (!postRepository) await getPostRepository();
 
   const postReplicationState = postRepository!.syncCouchDB({
     remote:
