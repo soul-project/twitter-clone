@@ -13,13 +13,13 @@ Twitter clone developed with Soul Network as the authentication and identity pro
 3. Create a new platform using your account (please replace the placeholders with your desired values)
 
 ```shell
-curl --location --request POST 'https://api.soul-network.com/v1/platforms' \
---header 'Authorization: Bearer <AUTH_TOKEN>' \
---header 'Content-Type: application/json' \
---data-raw '{
-    "name": "<PLATFORM_NAME>",
-    "redirect_uris": ["<VALID_CALLBACK_URL>"]
-}'
+$ curl --location --request POST 'https://api.soul-network.com/v1/platforms' \
+  --header 'Authorization: Bearer <AUTH_TOKEN>' \
+  --header 'Content-Type: application/json' \
+  --data-raw '{
+      "name": "<PLATFORM_NAME>",
+      "redirect_uris": ["<VALID_CALLBACK_URL>"]
+  }'
 ```
 
 4. Information about your platform will be returned, including a unique identifier represented by
