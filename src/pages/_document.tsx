@@ -7,7 +7,7 @@ export default class _Document extends Document {
       <Html>
         <Head />
         <body>
-          <ColorModeScript />
+          <ColorModeScript initialColorMode="dark" />
           <Main />
           <NextScript />
         </body>
