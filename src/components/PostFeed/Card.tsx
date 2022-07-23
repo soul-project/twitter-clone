@@ -78,11 +78,15 @@ export default function Card({ post }: Props) {
                 border="1px solid var(--chakra-colors-border-gray)"
                 backgroundColor="linkPreview.background"
               >
-                <Text>{post.previewMetadata.title}</Text>
+                <Text overflowWrap="anywhere" wordBreak="break-word">
+                  {post.previewMetadata.title}
+                </Text>
                 {post.previewMetadata.description && (
                   <>
                     <Divider />
-                    <Text>{post.previewMetadata.description}</Text>
+                    <Text overflowWrap="anywhere" wordBreak="break-word">
+                      {post.previewMetadata.description}
+                    </Text>
                   </>
                 )}
                 {post.previewMetadata.image && (
