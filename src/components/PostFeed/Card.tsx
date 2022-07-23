@@ -3,27 +3,22 @@ import {
   Avatar,
   Box,
   HStack,
-  Icon,
-  IconButton,
   Link,
-  Menu,
-  MenuButton,
-  MenuItem,
-  MenuList,
   Text,
   VStack,
+  Image,
+  Divider,
 } from "@chakra-ui/react";
 import { useMutation, useQuery, useQueryClient } from "react-query";
-import humanizeDuration from "humanize-duration";
 import { useSession } from "next-auth/react";
-import { BsThreeDots } from "react-icons/bs";
-import { DeleteIcon } from "@chakra-ui/icons";
 import Linkify from "linkify-react";
+import styled from "@emotion/styled";
 
 import { get } from "src/modules/users/get";
 import { getList, Post } from "src/modules/posts/getList";
 import { destroy } from "src/modules/posts/destroy";
-import styled from "@emotion/styled";
+
+import UserActionHeader from "./Card/UserActionHeader";
 
 export default function Card({ post }: Props) {
   const queryClient = useQueryClient();
@@ -31,7 +26,7 @@ export default function Card({ post }: Props) {
   const { data: userData } = useQuery([get.key, post.userId], () =>
     get(post.userId)
   );
-  const { mutateAsync: destroyAsync } = useMutation(async () => {
+  const { mutate: destroyPost } = useMutation(async () => {
     await destroy({ postId: post.entityId });
     queryClient.invalidateQueries(getList.key);
   });
@@ -54,61 +49,12 @@ export default function Card({ post }: Props) {
           <Avatar name={userData.username} size="md" zIndex={-1} />
         </Link>
         <VStack alignItems="flex-start" minW="0px" w="100%">
-          <HStack
-            justifyContent="space-between"
-            spacing="16px"
-            w="100%"
-            minW="0px"
-          >
-            <Link
-              display="inline-block"
-              href={`/profiles/${post.userId}`}
-              flexShrink={1}
-              overflow="hidden"
-            >
-              <Text
-                fontWeight="bold"
-                whiteSpace="nowrap"
-                textOverflow="ellipsis"
-                overflow="hidden"
-              >
-                {userData?.userHandle}
-              </Text>
-            </Link>
-            <Text
-              flexShrink={0}
-              whiteSpace="nowrap"
-              textOverflow="ellipsis"
-              overflow="hidden"
-              flexGrow={1}
-            >
-              {humanizeDuration(Date.now() - post.createdAt.getTime(), {
-                largest: 1,
-                round: true,
-                units: ["y", "mo", "w", "d", "h", "m"],
-              })}
-            </Text>
-            <Box flexShrink={0}>
-              <Menu>
-                <MenuButton
-                  as={IconButton}
-                  aria-label="Options"
-                  icon={<Icon as={BsThreeDots} />}
-                  variant="ghost"
-                  disabled={session?.user.id !== post.userId}
-                  flexShrink={0}
-                >
-                  Actions
-                </MenuButton>
-                <MenuList>
-                  <MenuItem onClick={() => destroyAsync()}>
-                    <DeleteIcon mr="12px" color="red" />
-                    <span>Delete</span>
-                  </MenuItem>
-                </MenuList>
-              </Menu>
-            </Box>
-          </HStack>
+          <UserActionHeader
+            userId={session?.user.id}
+            post={post}
+            userHandle={userData.userHandle}
+            onDestroyPost={destroyPost}
+          />
           <BodyText overflowWrap="anywhere" wordBreak="break-word">
             <Linkify
               tagName="p"
@@ -119,6 +65,38 @@ export default function Card({ post }: Props) {
               {post.body}
             </Linkify>
           </BodyText>
+          {post.previewMetadata && (
+            <Link
+              href={post.previewMetadata.url}
+              target="_blank"
+              _hover={{ textDecoration: "none" }}
+              w="100%"
+            >
+              <VStack
+                alignItems="flex-start"
+                padding="16px"
+                border="1px solid var(--chakra-colors-border-gray)"
+                backgroundColor="linkPreview.background"
+              >
+                <Text>{post.previewMetadata.title}</Text>
+                {post.previewMetadata.description && (
+                  <>
+                    <Divider />
+                    <Text>{post.previewMetadata.description}</Text>
+                  </>
+                )}
+                {post.previewMetadata.image && (
+                  <>
+                    <Divider />
+                    <Image
+                      src={post.previewMetadata.image}
+                      alt={post.previewMetadata.title}
+                    />
+                  </>
+                )}
+              </VStack>
+            </Link>
+          )}
         </VStack>
       </HStack>
     </Box>

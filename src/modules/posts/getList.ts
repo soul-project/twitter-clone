@@ -24,6 +24,12 @@ type PostData = {
   body: string;
   createdAt: number;
   updatedAt: number;
+  previewMetadata?: {
+    title: string;
+    description?: string;
+    image?: string;
+    url: string;
+  };
 };
 
 type PostListData = {
@@ -36,6 +42,12 @@ export type Post = {
   body: string;
   createdAt: Date;
   updatedAt: Date;
+  previewMetadata?: {
+    title: string;
+    description?: string;
+    image?: string;
+    url: string;
+  };
 };
 
 type PostList = {

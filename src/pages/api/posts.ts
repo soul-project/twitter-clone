@@ -12,14 +12,20 @@ import * as next from "next";
 import { getSession } from "next-auth/react";
 import { StatusCodes } from "http-status-codes";
 import { v4 as uuid } from "uuid";
+import getUrls from "get-urls";
+import parser from "html-metadata-parser";
+import pino from "pino";
 
 import {
   CreatePostBodyDto,
   GetPostListQueryParamsDto,
 } from "src/modules/api/serializers/posts";
 import { getPostRepository } from "src/modules/api/utils";
+import * as postModel from "src/models/posts";
 
 class PostHandler {
+  logger = pino({ name: PostHandler.name });
+
   @Get()
   async findPosts(
     @Query(ValidationPipe)
@@ -37,7 +43,31 @@ class PostHandler {
       })
       .exec();
 
-    const posts = results.map((doc) => doc.toJSON());
+    const posts = await Promise.all(
+      results.map(async (doc) => {
+        const document = doc.toJSON() as postModel.Post;
+        const extractedUrls = getUrls(document.body);
+        try {
+          if (extractedUrls.size > 0) {
+            const chosenPreviewUrl =
+              Array.from(extractedUrls)[extractedUrls.size - 1];
+            const { meta } = await parser(chosenPreviewUrl);
+            return {
+              ...doc.toJSON(),
+              previewMetadata: {
+                title: meta.title,
+                description: meta.description,
+                image: meta.image,
+                url: chosenPreviewUrl,
+              },
+            };
+          }
+        } catch (err) {
+          this.logger.error(err);
+        }
+        return document;
+      })
+    );
     return { posts };
   }
 
