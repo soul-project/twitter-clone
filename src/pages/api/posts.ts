@@ -6,15 +6,16 @@ import {
   Post,
   Query,
   Req,
+  Res,
   ValidationPipe,
 } from "@storyofams/next-api-decorators";
 import * as next from "next";
-import { getSession } from "next-auth/react";
 import { StatusCodes } from "http-status-codes";
 import { v4 as uuid } from "uuid";
 import getUrls from "get-urls";
 import parser from "html-metadata-parser";
 import pino from "pino";
+import { unstable_getServerSession } from "next-auth";
 
 import {
   CreatePostBodyDto,
@@ -22,6 +23,8 @@ import {
 } from "src/modules/api/serializers/posts";
 import { getPostRepository } from "src/modules/api/utils";
 import * as postModel from "src/models/posts";
+
+import { authOptions } from "./auth/[...nextauth]";
 
 class PostHandler {
   logger = pino({ name: PostHandler.name });
@@ -74,9 +77,10 @@ class PostHandler {
   @Post()
   async createPost(
     @Req() req: next.NextApiRequest,
+    @Res() res: next.NextApiResponse,
     @Body(ValidationPipe) body: CreatePostBodyDto
   ) {
-    const session = await getSession({ req });
+    const session = await unstable_getServerSession(req, res, authOptions);
 
     if (!session?.user.id) throw new HttpException(StatusCodes.FORBIDDEN);
 

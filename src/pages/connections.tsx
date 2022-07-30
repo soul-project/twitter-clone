@@ -1,5 +1,5 @@
 import { useEffect } from "react";
-import { getSession, signOut, useSession } from "next-auth/react";
+import { signOut, useSession } from "next-auth/react";
 import {
   VStack,
   Tabs,
@@ -8,13 +8,21 @@ import {
   Tab,
   TabPanel,
 } from "@chakra-ui/react";
+import { unstable_getServerSession } from "next-auth";
 
 import Head from "src/components/Head";
 import Page from "src/components/Page";
 import ConnectionsList from "src/components/ConnectionsList";
 
+import { authOptions } from "./api/auth/[...nextauth]";
+
 export async function getServerSideProps(ctx: any) {
-  const session = await getSession(ctx);
+  const session = await unstable_getServerSession(
+    ctx.req,
+    ctx.res,
+    authOptions
+  );
+
   if (!session) {
     return {
       redirect: {
@@ -25,7 +33,7 @@ export async function getServerSideProps(ctx: any) {
   }
 
   return {
-    props: { session },
+    props: { session: { ...session, error: session.error ?? null } },
   };
 }
 

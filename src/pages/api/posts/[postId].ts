@@ -3,21 +3,27 @@ import {
   Delete,
   HttpException,
   Req,
+  Res,
 } from "@storyofams/next-api-decorators";
 import * as next from "next";
 import { StatusCodes } from "http-status-codes";
-import { getSession } from "next-auth/react";
+import { unstable_getServerSession } from "next-auth";
 
 import { getPostRepository } from "src/modules/api/utils";
 
+import { authOptions } from "../auth/[...nextauth]";
+
 class PostHandler {
   @Delete()
-  async deletePost(@Req() req: next.NextApiRequest): Promise<void> {
+  async deletePost(
+    @Req() req: next.NextApiRequest,
+    @Res() res: next.NextApiResponse
+  ): Promise<void> {
     const {
       query: { postId },
     } = req;
 
-    const session = await getSession({ req });
+    const session = await unstable_getServerSession(req, res, authOptions);
 
     const postRxRepository = await getPostRepository();
     const existingPostQuery = postRxRepository.findOne({

@@ -1,8 +1,9 @@
 import { useEffect } from "react";
 import type { NextPage } from "next";
-import { getSession, signOut, useSession } from "next-auth/react";
+import { signOut, useSession } from "next-auth/react";
 import { HStack, VStack } from "@chakra-ui/react";
 import { dehydrate, QueryClient, useQuery } from "react-query";
+import { unstable_getServerSession } from "next-auth";
 
 import PostFeed from "src/components/PostFeed";
 import Head from "src/components/Head";
@@ -10,16 +11,26 @@ import Page from "src/components/Page";
 import { get } from "src/modules/users/get";
 import FollowButton from "src/components/FollowButton";
 
+import { authOptions } from "../api/auth/[...nextauth]";
+
 export async function getServerSideProps(ctx: any) {
   const queryClient = new QueryClient();
-  const session = await getSession(ctx);
+  const session = await unstable_getServerSession(
+    ctx.req,
+    ctx.res,
+    authOptions
+  );
   const userId = parseInt(ctx.params.userId);
 
   if (isNaN(userId)) throw new Error("Invalid userId");
 
   await queryClient.prefetchQuery([get.key, userId], () => get(userId));
   return {
-    props: { session, userId, dehydratedState: dehydrate(queryClient) },
+    props: {
+      session: session ? { ...session, error: session.error ?? null } : null,
+      userId,
+      dehydratedState: dehydrate(queryClient),
+    },
   };
 }
 

@@ -1,19 +1,29 @@
 import { useEffect } from "react";
-import { getSession, signOut, useSession } from "next-auth/react";
+import { signOut, useSession } from "next-auth/react";
 import { VStack } from "@chakra-ui/react";
 import { dehydrate, QueryClient } from "react-query";
+import { unstable_getServerSession } from "next-auth";
 
 import Head from "src/components/Head";
 import Page from "src/components/Page";
 import CreateNewPostForm from "src/components/CreateNewPostForm";
 import PostFeed from "src/components/PostFeed";
 
+import { authOptions } from "./api/auth/[...nextauth]";
+
 export async function getServerSideProps(ctx: any) {
-  const session = await getSession(ctx);
+  const session = await unstable_getServerSession(
+    ctx.req,
+    ctx.res,
+    authOptions
+  );
   const queryClient = new QueryClient();
 
   return {
-    props: { session, dehydratedState: dehydrate(queryClient) },
+    props: {
+      session: session ? { ...session, error: session.error ?? null } : null,
+      dehydratedState: dehydrate(queryClient),
+    },
   };
 }
 
