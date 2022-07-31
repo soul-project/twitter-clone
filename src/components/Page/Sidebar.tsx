@@ -6,6 +6,7 @@ import { BsFillPersonFill, BsTwitter } from "react-icons/bs";
 import { IoIosSend } from "react-icons/io";
 import { FaUserFriends } from "react-icons/fa";
 import { signIn, signOut, useSession } from "next-auth/react";
+import NextLink from "next/link";
 
 import SidebarButton from "./Sidebar/SidebarButton";
 import ProfileBadge from "./Sidebar/ProfileBadge";
@@ -29,11 +30,13 @@ export default function Sidebar({
         marginLeft="12px"
       >
         <VStack spacing="32px" alignItems="flex-start">
-          <Link href="/">
-            <Button variant="ghost">
-              <Icon as={BsTwitter} w="32px" h="32px" color="yellow" />
-            </Button>
-          </Link>
+          <NextLink passHref href="/">
+            <Link>
+              <Button variant="ghost">
+                <Icon as={BsTwitter} w="32px" h="32px" color="yellow" />
+              </Button>
+            </Link>
+          </NextLink>
           <SidebarButton
             title="Home"
             icon={<Icon as={AiFillHome} />}

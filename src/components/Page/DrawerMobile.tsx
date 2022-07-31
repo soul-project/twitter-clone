@@ -15,6 +15,7 @@ import {
   Divider,
 } from "@chakra-ui/react";
 import { signIn, signOut, useSession } from "next-auth/react";
+import NextLink from "next/link";
 
 export default function DrawerMobile({ isOpen, onClose }: Props) {
   const { data: session } = useSession();
@@ -29,27 +30,28 @@ export default function DrawerMobile({ isOpen, onClose }: Props) {
         <DrawerBody>
           <VStack w="100%" alignItems="flex-start" spacing="16px">
             {session && (
-              <Link
-                href={`/profiles/${session!.user.id}`}
-                _hover={{ textDecoration: "none" }}
-              >
-                <HStack>
-                  <Avatar name={session!.user.username} />
-                  <Text
-                    fontWeight="bold"
-                    _hover={{ textDecoration: "underline" }}
-                  >
-                    {session!.user.username}
-                  </Text>
-                </HStack>
-              </Link>
+              <NextLink passHref href={`/profiles/${session!.user.id}`}>
+                <Link _hover={{ textDecoration: "none" }}>
+                  <HStack>
+                    <Avatar name={session!.user.username} />
+                    <Text
+                      fontWeight="bold"
+                      _hover={{ textDecoration: "underline" }}
+                    >
+                      {session!.user.username}
+                    </Text>
+                  </HStack>
+                </Link>
+              </NextLink>
             )}
             <Divider />
             {session && (
               <>
-                <Link href="/connections">
-                  <Button variant="link">Connections</Button>
-                </Link>
+                <NextLink passHref href="/connections">
+                  <Link>
+                    <Button variant="link">Connections</Button>
+                  </Link>
+                </NextLink>
                 <Divider />
               </>
             )}

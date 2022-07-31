@@ -1,7 +1,8 @@
 import React from "react";
 import { Button, Link, Text } from "@chakra-ui/react";
+import NextLink from "next/link";
 
-export default function SidebarButton({ href, icon, title, onClick }: Props) {
+function LinkButton({ href, onClick, icon, title }: Props) {
   return (
     <Link href={href} _hover={{ textDecoration: "none" }}>
       <Button
@@ -18,6 +19,18 @@ export default function SidebarButton({ href, icon, title, onClick }: Props) {
       </Button>
     </Link>
   );
+}
+
+export default function SidebarButton({ href, ...props }: Props) {
+  if (href && href.startsWith("/")) {
+    return (
+      <NextLink passHref href={href}>
+        <LinkButton {...props} />
+      </NextLink>
+    );
+  }
+
+  return <LinkButton href={href} {...props} />;
 }
 
 type Props = {

@@ -10,6 +10,7 @@ import {
   Box,
   Button,
 } from "@chakra-ui/react";
+import NextLink from "next/link";
 
 import {
   ConnectionType,
@@ -76,24 +77,25 @@ export default function FollowingList({ connectionType }: Props) {
                 borderBottom="1px solid var(--chakra-colors-border-gray)"
                 minW="0px"
               >
-                <Link
-                  _hover={{ textDecoration: "none" }}
-                  href={`/profiles/${userConnection.userId}`}
-                  flexShrink={1}
-                  overflow="hidden"
-                >
-                  <HStack>
-                    <Avatar name={userConnection.username} />
-                    <Text
-                      _hover={{ textDecoration: "underline" }}
-                      whiteSpace="nowrap"
-                      textOverflow="ellipsis"
-                      overflow="hidden"
-                    >
-                      {userConnection.userHandle}
-                    </Text>
-                  </HStack>
-                </Link>
+                <NextLink passHref href={`/profiles/${userConnection.userId}`}>
+                  <Link
+                    _hover={{ textDecoration: "none" }}
+                    flexShrink={1}
+                    overflow="hidden"
+                  >
+                    <HStack>
+                      <Avatar name={userConnection.username} />
+                      <Text
+                        _hover={{ textDecoration: "underline" }}
+                        whiteSpace="nowrap"
+                        textOverflow="ellipsis"
+                        overflow="hidden"
+                      >
+                        {userConnection.userHandle}
+                      </Text>
+                    </HStack>
+                  </Link>
+                </NextLink>
                 <Box flexShrink={0}>
                   <FollowButton
                     userId={userConnection.userId}

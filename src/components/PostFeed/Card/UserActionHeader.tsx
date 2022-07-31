@@ -14,6 +14,7 @@ import {
 import { DeleteIcon } from "@chakra-ui/icons";
 import humanizeDuration from "humanize-duration";
 import { BsThreeDots } from "react-icons/bs";
+import NextLink from "next/link";
 
 import { Post } from "src/modules/posts/getList";
 
@@ -25,21 +26,18 @@ export default function UserActionHeader({
 }: Props) {
   return (
     <HStack justifyContent="space-between" spacing="16px" w="100%" minW="0px">
-      <Link
-        display="inline-block"
-        href={`/profiles/${post.userId}`}
-        flexShrink={1}
-        overflow="hidden"
-      >
-        <Text
-          fontWeight="bold"
-          whiteSpace="nowrap"
-          textOverflow="ellipsis"
-          overflow="hidden"
-        >
-          {userHandle}
-        </Text>
-      </Link>
+      <NextLink href={`/profiles/${post.userId}`} passHref>
+        <Link display="inline-block" flexShrink={1} overflow="hidden">
+          <Text
+            fontWeight="bold"
+            whiteSpace="nowrap"
+            textOverflow="ellipsis"
+            overflow="hidden"
+          >
+            {userHandle}
+          </Text>
+        </Link>
+      </NextLink>
       <Text
         flexShrink={0}
         whiteSpace="nowrap"

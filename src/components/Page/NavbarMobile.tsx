@@ -4,6 +4,7 @@ import { AiFillHome } from "react-icons/ai";
 import { BsFillPersonFill } from "react-icons/bs";
 import { IoIosSend } from "react-icons/io";
 import { useSession } from "next-auth/react";
+import NextLink from "next/link";
 
 export default function NavbarMobile({ onOpenCreatePostModal }: Props) {
   const { data: session } = useSession();
@@ -22,20 +23,21 @@ export default function NavbarMobile({ onOpenCreatePostModal }: Props) {
       borderTop="1px solid var(--chakra-colors-border-gray)"
     >
       {session && (
-        <Link
-          href={`/profiles/${session?.user.id}`}
-          _hover={{ textDecoration: "none" }}
-        >
+        <NextLink passHref href={`/profiles/${session?.user.id}`}>
+          <Link _hover={{ textDecoration: "none" }}>
+            <Button variant="ghost">
+              <Icon as={BsFillPersonFill} height="26px" width="26px" />
+            </Button>
+          </Link>
+        </NextLink>
+      )}
+      <NextLink passHref href="/">
+        <Link _hover={{ textDecoration: "none" }}>
           <Button variant="ghost">
-            <Icon as={BsFillPersonFill} height="26px" width="26px" />
+            <Icon as={AiFillHome} height="26px" width="26px" />
           </Button>
         </Link>
-      )}
-      <Link href="/" _hover={{ textDecoration: "none" }}>
-        <Button variant="ghost">
-          <Icon as={AiFillHome} height="26px" width="26px" />
-        </Button>
-      </Link>
+      </NextLink>
       {session && (
         <Button variant="ghost" onClick={onOpenCreatePostModal}>
           <Icon as={IoIosSend} height="26px" width="26px" />

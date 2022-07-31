@@ -13,6 +13,7 @@ import { useMutation, useQuery, useQueryClient } from "react-query";
 import { useSession } from "next-auth/react";
 import Linkify from "linkify-react";
 import styled from "@emotion/styled";
+import NextLink from "next/link";
 
 import { get } from "src/modules/users/get";
 import { getList, Post } from "src/modules/posts/getList";
@@ -41,13 +42,11 @@ export default function Card({ post }: Props) {
       padding="16px"
     >
       <HStack alignItems="flex-start">
-        <Link
-          display="inline-block"
-          href={`/profiles/${post.userId}`}
-          _hover={{ textDecoration: "none" }}
-        >
-          <Avatar name={userData.username} size="md" zIndex={-1} />
-        </Link>
+        <NextLink passHref href={`/profiles/${post.userId}`}>
+          <Link display="inline-block" _hover={{ textDecoration: "none" }}>
+            <Avatar name={userData.username} size="md" zIndex={-1} />
+          </Link>
+        </NextLink>
         <VStack alignItems="flex-start" minW="0px" w="100%">
           <UserActionHeader
             userId={session?.user.id}
