@@ -1,6 +1,7 @@
 import {
   createHandler,
   Delete,
+  Get,
   HttpException,
   Req,
   Res,
@@ -10,10 +11,27 @@ import { StatusCodes } from "http-status-codes";
 import { unstable_getServerSession } from "next-auth";
 
 import { getPostRepository } from "src/modules/api/utils";
+import * as postModel from "src/models/posts";
 
 import { authOptions } from "../auth/[...nextauth]";
 
 class PostHandler {
+  @Get()
+  async getPost(@Req() req: next.NextApiRequest) {
+    const {
+      query: { postId },
+    } = req;
+
+    const postRxRepository = await getPostRepository();
+    const existingPostQuery = postRxRepository.findOne({
+      selector: { entityId: postId },
+    });
+    const existingPost = await existingPostQuery.exec();
+
+    if (!existingPost) throw new HttpException(StatusCodes.NOT_FOUND);
+    return existingPost.toJSON() as postModel.Post;
+  }
+
   @Delete()
   async deletePost(
     @Req() req: next.NextApiRequest,

@@ -8,6 +8,8 @@ import {
   VStack,
   Image,
   Divider,
+  LinkBox,
+  LinkOverlay,
 } from "@chakra-ui/react";
 import { useMutation, useQuery, useQueryClient } from "react-query";
 import { useSession } from "next-auth/react";
@@ -54,16 +56,23 @@ export default function Card({ post }: Props) {
             userHandle={userData.userHandle}
             onDestroyPost={destroyPost}
           />
-          <BodyText overflowWrap="anywhere" wordBreak="break-word">
-            <Linkify
-              tagName="p"
-              options={{
-                target: { url: "_blank" },
-              }}
-            >
-              {post.body}
-            </Linkify>
-          </BodyText>
+          <LinkBox as="article" w="100%">
+            <NextLink passHref href={`/posts/${post.entityId}`}>
+              <LinkOverlay>
+                <BodyText overflowWrap="anywhere" wordBreak="break-word">
+                  <Linkify
+                    tagName="p"
+                    options={{
+                      target: { url: "_blank" },
+                    }}
+                  >
+                    {post.body}
+                  </Linkify>
+                </BodyText>
+              </LinkOverlay>
+            </NextLink>
+          </LinkBox>
+
           {post.previewMetadata && (
             <Link
               href={post.previewMetadata.url}
