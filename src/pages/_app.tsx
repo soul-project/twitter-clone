@@ -1,10 +1,11 @@
 import { useState } from "react";
 import type { AppProps } from "next/app";
-import { ChakraProvider } from "@chakra-ui/react";
+import { ChakraProvider, CSSReset } from "@chakra-ui/react";
 import { SessionProvider } from "next-auth/react";
 import { Hydrate, QueryClient, QueryClientProvider } from "react-query";
 
 import theme from "src/theme";
+import NextNProgress from "nextjs-progressbar";
 
 function MyApp({
   Component,
@@ -17,6 +18,8 @@ function MyApp({
       <QueryClientProvider client={queryClient}>
         <Hydrate state={dehydratedState}>
           <ChakraProvider theme={theme}>
+            <NextNProgress color="white" options={{ showSpinner: false }} />
+            <CSSReset />
             <Component {...pageProps} />
           </ChakraProvider>
         </Hydrate>

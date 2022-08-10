@@ -56,7 +56,8 @@ export default function Card({ post }: Props) {
             userHandle={userData.userHandle}
             onDestroyPost={destroyPost}
           />
-          <LinkBox as="article" w="100%">
+          {/* TODO: Disabled post page for now */}
+          {/* <LinkBox as="article" w="100%">
             <NextLink passHref href={`/posts/${post.entityId}`}>
               <LinkOverlay>
                 <BodyText overflowWrap="anywhere" wordBreak="break-word">
@@ -71,7 +72,18 @@ export default function Card({ post }: Props) {
                 </BodyText>
               </LinkOverlay>
             </NextLink>
-          </LinkBox>
+          </LinkBox> */}
+
+          <BodyText overflowWrap="anywhere" wordBreak="break-word">
+            <Linkify
+              tagName="p"
+              options={{
+                target: { url: "_blank" },
+              }}
+            >
+              {post.body}
+            </Linkify>
+          </BodyText>
 
           {post.previewMetadata && (
             <Link
