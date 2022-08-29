@@ -23,7 +23,7 @@ const Following = () => {
       signOut();
     }
 
-    if (status !== "unauthenticated") router.push("/");
+    if (status === "unauthenticated") router.push("/");
   }, [router, session, status]);
 
   return (
