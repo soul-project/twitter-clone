@@ -8,43 +8,23 @@ import {
   Tab,
   TabPanel,
 } from "@chakra-ui/react";
-import { unstable_getServerSession } from "next-auth";
+import { useRouter } from "next/router";
 
 import Head from "src/components/Head";
 import Page from "src/components/Page";
 import ConnectionsList from "src/components/ConnectionsList";
 
-import { authOptions } from "./api/auth/[...nextauth]";
-
-export async function getServerSideProps(ctx: any) {
-  const session = await unstable_getServerSession(
-    ctx.req,
-    ctx.res,
-    authOptions
-  );
-
-  if (!session) {
-    return {
-      redirect: {
-        permanent: false,
-        destination: `/`,
-      },
-    };
-  }
-
-  return {
-    props: { session: { ...session, error: session.error ?? null } },
-  };
-}
-
 const Following = () => {
-  const { data: session } = useSession();
+  const { data: session, status } = useSession();
+  const router = useRouter();
 
   useEffect(() => {
     if (session?.error === "RefreshAccessTokenError") {
       signOut();
     }
-  }, [session]);
+
+    if (status !== "unauthenticated") router.push("/");
+  }, [router, session, status]);
 
   return (
     <>

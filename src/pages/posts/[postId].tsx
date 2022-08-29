@@ -2,28 +2,16 @@ import { useEffect } from "react";
 import type { NextPage } from "next";
 import { signOut, useSession } from "next-auth/react";
 import { VStack, Text, Center } from "@chakra-ui/react";
-import { dehydrate, QueryClient } from "react-query";
-import { unstable_getServerSession } from "next-auth";
 
 import Head from "src/components/Head";
 import Page from "src/components/Page";
 
-import { authOptions } from "../api/auth/[...nextauth]";
-
 export async function getServerSideProps(ctx: any) {
-  const queryClient = new QueryClient();
-  const session = await unstable_getServerSession(
-    ctx.req,
-    ctx.res,
-    authOptions
-  );
+  const postId = ctx.params.postId;
 
+  if (!postId) throw new Error("Invalid postId");
   return {
-    props: {
-      session: session ? { ...session, error: session.error ?? null } : null,
-      postId: ctx.params.postId,
-      dehydratedState: dehydrate(queryClient),
-    },
+    props: { postId },
   };
 }
 
