@@ -42,27 +42,24 @@ export default function Sidebar({
             icon={<Icon as={AiFillHome} />}
             href="/"
           />
-          {session && (
-            <SidebarButton
-              title="Profile"
-              icon={<Icon as={BsFillPersonFill} />}
-              href={`/profiles/${session?.user.id}`}
-            />
-          )}
-          {session && (
-            <SidebarButton
-              title="Connections"
-              icon={<Icon as={FaUserFriends} />}
-              href="/connections"
-            />
-          )}
-          {session && (
-            <SidebarButton
-              title="Post"
-              icon={<Icon as={IoIosSend} />}
-              onClick={onOpenCreatePostModal}
-            />
-          )}
+          <SidebarButton
+            title="Profile"
+            icon={<Icon as={BsFillPersonFill} />}
+            href={`/profiles/${session?.user.id}`}
+            visibility={session ? "visible" : "hidden"}
+          />
+          <SidebarButton
+            title="Connections"
+            icon={<Icon as={FaUserFriends} />}
+            href="/connections"
+            visibility={session ? "visible" : "hidden"}
+          />
+          <SidebarButton
+            title="Post"
+            icon={<Icon as={IoIosSend} />}
+            onClick={onOpenCreatePostModal}
+            visibility={session ? "visible" : "hidden"}
+          />
         </VStack>
         {session ? (
           <ProfileBadge

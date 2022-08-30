@@ -2,9 +2,19 @@ import React from "react";
 import { Button, Link, Text } from "@chakra-ui/react";
 import NextLink from "next/link";
 
-function LinkButton({ href, onClick, icon, title }: Props) {
+function LinkButton({
+  href,
+  onClick,
+  icon,
+  title,
+  visibility = "visible",
+}: Props) {
   return (
-    <Link href={href} _hover={{ textDecoration: "none" }}>
+    <Link
+      href={href}
+      _hover={{ textDecoration: "none" }}
+      visibility={visibility}
+    >
       <Button
         variant="ghost"
         fontSize="2xl"
@@ -38,4 +48,5 @@ type Props = {
   icon: React.ReactElement<any>;
   title: string;
   onClick?: () => void;
+  visibility?: "hidden" | "visible";
 };
