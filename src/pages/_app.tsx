@@ -14,7 +14,11 @@ function MyApp({
   const [queryClient] = useState(() => new QueryClient());
 
   return (
-    <SessionProvider session={session}>
+    <SessionProvider
+      session={session}
+      refetchInterval={1800}
+      refetchOnWindowFocus={false}
+    >
       <QueryClientProvider client={queryClient}>
         <Hydrate state={dehydratedState}>
           <ChakraProvider theme={theme}>

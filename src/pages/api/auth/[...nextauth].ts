@@ -110,7 +110,7 @@ export const authOptions: NextAuthOptions = {
       if (account && user) {
         const expiresAt = account.expires_at
           ? account.expires_at * 1000
-          : Date.now() + 900 * 1000;
+          : Date.now() + 1800 * 1000;
 
         return {
           account,
