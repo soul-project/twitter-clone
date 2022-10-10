@@ -11,7 +11,7 @@ const getNewTokenFromServer = async (
   expiresIn: number;
   refreshToken: string;
 }> => {
-  const url = "https://api.soul-network.com/v1/auth/refresh";
+  const url = "https://api.soul-network.com/v1/auth/oauth/refresh-token";
   const { data } = await axios.post<{
     access_token: string;
     expires_in: number;
@@ -88,7 +88,7 @@ export const authOptions: NextAuthOptions = {
       name: "Soul",
       type: "oauth",
       authorization: "https://login.soul-network.com",
-      token: "https://api.soul-network.com/v1/auth/verify",
+      token: "https://api.soul-network.com/v1/auth/oauth/authorization-code",
       userinfo: "https://api.soul-network.com/v1/users/me",
       checks: ["pkce", "state"],
       clientId: String(CLIENT_ID),
